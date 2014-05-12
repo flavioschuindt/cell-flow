@@ -38,23 +38,23 @@ class Torus:
 
 	def update(self):
 		self.velocity.add(self.acceleration)
-		self.location.add(self.acceleration)
+		self.location.add(self.velocity)
 		self.translate(self.location.x, self.location.y, self.location.z)
 
 		self.acceleration.mult(0)
 
 	def check_edges(self):
 
-		if self.location.x > 1:
-			self.location.x = 1
+		if self.location.x > 4:
+			self.location.x = 4
 			self.velocity.x *= -1
 		elif self.location.x < 0:
 			self.velocity.x *= -1
 			self.location.x = 0
 
-		if self.location.y > 0.5:
+		if self.location.y > 4:
 			self.velocity.y *= -1
-			self.location.y = 0.5
+			self.location.y = 4
 
 	def translate(self, x=0, y=0, z=0):
 		self.matrix[12] = x
@@ -124,18 +124,18 @@ def idle():
 
 	wind = PVector(-0.1, 0)
 	for torus in scene:
-		gravity = PVector(0, -0.3*torus.mass)
+		gravity = PVector(0, -0.01*torus.mass)
 		torus.apply_force(wind)
 		torus.apply_force(gravity)
 		torus.update()
-		torus.check_edges()
+		#torus.check_edges()
 
 	display()
 
 def main():
 	global scene
 	for x in range(20):
-		mass = random.uniform(0, 10)
+		mass = random.uniform(0, 200)
 		location_x = random.uniform(0, 3)
 		location_y = random.uniform(0, 3)
 		location_z = random.uniform(5, 6)
