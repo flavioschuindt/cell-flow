@@ -122,10 +122,10 @@ def reshape(x, y):
 def idle():
 	global factor
 
-	wind = PVector(-0.1, 0)
+	fluid = PVector(-0.1, 0)
 	for torus in scene:
 		gravity = PVector(0, -0.01*torus.mass)
-		torus.apply_force(wind)
+		torus.apply_force(fluid)
 		torus.apply_force(gravity)
 		torus.update()
 		#torus.check_edges()
