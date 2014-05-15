@@ -1,12 +1,6 @@
-from OpenGL.GLUT import *
-from OpenGL.GLU import *
-from OpenGL.GL import *
-from math import pi, cos, sin
-import random
+from math import pi, cos, sin, sqrt
 from vector import PVector
- 
-scene = []
-factor = 1
+
 
 class Torus:
 
@@ -45,16 +39,19 @@ class Torus:
 
 	def check_edges(self):
 
-		if self.location.x > 4:
-			self.location.x = 4
+		if self.location.x > 1:
+			self.location.x = 1
 			self.velocity.x *= -1
-		elif self.location.x < 0:
+		elif self.location.x < -1:
 			self.velocity.x *= -1
-			self.location.x = 0
+			self.location.x = -1
 
-		if self.location.y > 4:
+		if self.location.y > 1:
 			self.velocity.y *= -1
-			self.location.y = 4
+			self.location.y = 1
+		elif self.location.y < -1:
+			self.velocity.y *= -1
+			self.location.y = -1
 
 	def translate(self, x=0, y=0, z=0):
 		self.matrix[12] = x
@@ -84,83 +81,58 @@ class Torus:
 					k -= 1
 					self.points.append((x, y, z))
 
-def display():
-	global scene
-	# clear the drawing buffer.
-	glClear(GL_COLOR_BUFFER_BIT)
-	for torus in scene:
+	def is_colliding_with(self, t):
+		'''delta = PVector.sub(self.location, t.location)
+		delta_squared = PVector.square(delta)
+		sum_radius_squared = ((self.inner_radius + self.outter_radius) + (t.inner_radius + t.outter_radius)) ** 2
 
-		glMatrixMode(GL_MODELVIEW)
-		glLoadIdentity()
-		glColor3f(*torus.color)
-		glPushMatrix()
-		glMultMatrixf(torus.matrix)
+		return ((delta_squared.x + delta_squared.y) <= sum_radius_squared)'''
 
-		points = torus.calc_points()
+		'''
+			Test #1: If the length of the velocity vector is less than distance between the centers of the spheres minus 
+			their radius, there's no way they can hit.
+		'''
+		distance = PVector.magnitude(PVector.sub(self.location, t.location))
+		sum_radius = ((self.inner_radius + self.outter_radius) + (t.inner_radius + t.outter_radius))
+		velocity_mag = PVector.magnitude(self.velocity)
+		if velocity_mag < (distance - sum_radius):
+			return False
 
-		glBegin(GL_QUAD_STRIP)
-		for point in torus.points:
-			glVertex3d(*point)
-		glEnd()
+		'''
+			Test #2: Make sure that A is moving towards B.
+		'''
+		n = PVector.normalize(self.velocity)
+		c = PVector.sub(t.location, self.location)
+		d = PVector.dot(n, c)
+		if d <= 0:
+			return False
 
-		glPopMatrix()
-		glFlush()
+		f = (distance * distance) - (d * d) # Pitagoras' Theorem
+		sum_radius_squared = sum_radius * sum_radius
 
-	glutSwapBuffers()
+		'''
+			Test #3: If the closest that A will get to B is more than the sum of their radius, 
+			there's no way they are going collide
+		'''
+		if f >= sum_radius_squared:
+			return False
 
-def reshape(x, y):
-	if y == 0 or x == 0:
-		return
-	glMatrixMode(GL_PROJECTION)
-	glLoadIdentity()
-	gluPerspective(40.0, x/y, 0.5, 20.0)
+		s = sum_radius_squared - f
+		if s < 0:
+			return False
+		
+		'''
+			Test #4: The limit that the moving sphere can move without touch the static sphere is: limit = d - sqrt(t).
+			So, we should make sure that the distance the moving sphere A has to move to touch static sphere B is not greater
+			than the velocity magnitude.
+		'''
 
-	glViewport(0, 0, x, y)
-	glMatrixMode(GL_MODELVIEW)
-	glutPostRedisplay()
+		limit = d - sqrt(s)
+		if velocity_mag < limit:
+			return False
 
-def idle():
-	global factor
+		return True
 
-	fluid = PVector(-0.1, 0)
-	for torus in scene:
-		gravity = PVector(0, -0.01*torus.mass)
-		torus.apply_force(fluid)
-		torus.apply_force(gravity)
-		torus.update()
-		#torus.check_edges()
 
-	display()
 
-def main():
-	global scene
-	for x in range(20):
-		mass = random.uniform(0, 200)
-		location_x = random.uniform(0, 3)
-		location_y = random.uniform(0, 3)
-		location_z = random.uniform(5, 6)
-		t = Torus(
-				 sides=100, 
-				 rings=50, 
-				 color=(1,0,0), 
-				 location=(location_x, location_y, -1*location_z), 
-				 inner_radius=0, 
-				 outter_radius=0.03, 
-				 mass=mass
-				 )
-		scene.append(t)
 
-	glutInit(sys.argv)
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
-	glutInitWindowSize(800, 800)
-	glutInitWindowPosition(450, 200)
-	glutCreateWindow("Torus")
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
-	glClearColor(0.0, 0.0, 0.0, 0.0)
-	glutDisplayFunc(display)
-	glutReshapeFunc(reshape)
-	glutIdleFunc(idle)
-	glutMainLoop()
-	return 0
-
-if __name__  == '__main__': main()
