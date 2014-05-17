@@ -4,7 +4,8 @@ from vector import PVector
 
 class Torus:
 
-	def __init__(self, color, location, inner_radius=1, outter_radius=0.2, sides=50, rings=50, mass=1):
+	def __init__(self, color, location, inner_radius=1, outter_radius=0.2, 
+				 sides=50, rings=50, mass=1, max_speed=0.01, max_force=0.03):
 
 		self.inner_radius = inner_radius
 		self.outter_radius = outter_radius
@@ -14,6 +15,8 @@ class Torus:
 		self.y_rotated = 0
 		self.z_rotated = 0
 		self.color = color
+		self.max_speed = max_speed
+		self.max_force = max_force
 		
 		self.points = []
 		self.matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
@@ -35,7 +38,6 @@ class Torus:
 		self.velocity.add(self.acceleration)
 		self.location.add(self.velocity)
 		self._check_edges(aspect, fovy)
-		self.translate(self.location.x, self.location.y, self.location.z)
 
 		self.acceleration.mult(0)
 
@@ -137,6 +139,51 @@ class Torus:
 			return False
 
 		return True
+
+	def flock(self, scene, desired_separation):
+		sep = self.separate(scene, desired_separation)   # Separation
+		#PVector ali = align(boids)      # Alignment
+		#PVector coh = cohesion(boids)   # Cohesion
+		# Arbitrarily weight these forces
+		#sep.mult(1.5);
+		#ali.mult(1.0);
+		#coh.mult(1.0);
+		# Add the force vectors to acceleration
+		self.apply_force(sep)
+		#self.apply_force(ali)
+		#self.apply_force(coh)
+
+  	# Separation
+  	# Method checks for nearby torus and steers away
+  	def separate(self, scene, desired_separation):
+    
+		steer = PVector(0.0, 0.0, 0.0)
+		count = 0
+		# For every torus in the system, check if it's too close
+		for torus in scene:
+			d = PVector.distance(self.location, torus.location)
+			# If the distance is greater than 0 and less than an arbitrary amount (0 when you are yourself)
+			if d > 0 and d < desired_separation:
+				# Calculate vector pointing away from neighbor
+				diff = PVector.sub(self.location, torus.location)
+				diff = PVector.normalize(diff)
+				diff = PVector.div(diff, d) # Weight by distance
+				steer.add(diff)
+				count += 1 #Keep track of how many
+		
+		# Average -- divide by how many
+		if count > 0:
+			steer = PVector.div(steer, float(count))
+
+		# As long as the vector is greater than 0
+		if PVector.magnitude(steer) > 0:
+			# Implement Reynolds: Steering = Desired - Velocity
+			steer = PVector.normalize(steer)
+			steer.mult(self.max_speed)
+			steer = PVector.sub(steer, self.velocity)
+			steer = PVector.limit(steer, self.max_force)
+
+		return steer
 
 
 

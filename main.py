@@ -2,13 +2,15 @@ from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from OpenGL.GL import *
 import random
-from vector import PVector
+from math import sin, radians
 
+from vector import PVector
 from torus import Torus
 from const import FRAME_PERIOD, INIT_WINDOW_SIZE, INIT_WINDOW_POSITION, \
 				  BACKGROUND_COLOR, TORUS_SIDES, TORUS_RINGS, TORUS_COLOR, \
 				  TORUS_INNER_RADIUS, TORUS_OUTTER_RADIUS, TORUS_MASS_RANGE, \
-				  TORUS_QUANTITY, FOVY, Z_NEAR, Z_FAR, FLUID_FORCE, GRAVITY_FORCE_FACTOR
+				  TORUS_QUANTITY, FOVY, Z_NEAR, Z_FAR, FLUID_FORCE, GRAVITY_FORCE_FACTOR, \
+				  TORUS_DESIRED_SEPARATION
 
 scene = []
 current_w = 0
@@ -56,27 +58,30 @@ def reshape(w, h):
 
 def timer(value):
 	global scene
-	if scene[1].is_colliding_with(scene[0]):
-			print 'Pode colidir!'
 
 	fluid = PVector(*FLUID_FORCE)
 	for index, torus in enumerate(scene):
 		gravity = PVector(0, GRAVITY_FORCE_FACTOR*torus.mass)
-		if index == 1:
-			torus.apply_force(fluid)
-			torus.apply_force(gravity)
+		torus.apply_force(fluid)
+		torus.apply_force(gravity)
 		torus.update(float(current_w)/current_h, FOVY)
+		torus.flock(scene, TORUS_DESIRED_SEPARATION)
+		torus.translate(torus.location.x, torus.location.y, torus.location.z)
 
 	display()
 	glutTimerFunc(FRAME_PERIOD, timer, 0)
 
 def main():
 	global scene
+	w, h = INIT_WINDOW_SIZE
+	aspect = float(w) / h
 	for x in range(TORUS_QUANTITY):
 		mass = random.uniform(*TORUS_MASS_RANGE)
-		location_x = 0
-		location_y = 0 if x == 0 else 3
-		location_z = 4
+		location_z = 4#random.uniform(Z_NEAR, Z_FAR)
+		limit_y = round(sin(radians(FOVY/2))*-1*location_z, 2)
+		limit_x = round((aspect * (limit_y*2)) / 2, 2)
+		location_x = random.uniform(0, limit_x)
+		location_y = random.uniform(0, limit_y)
 		t = Torus(
 				 sides=TORUS_SIDES, 
 				 rings=TORUS_RINGS, 

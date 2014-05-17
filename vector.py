@@ -52,5 +52,14 @@ class PVector:
 	def dot(u, v):
 		return u.x*v.x + u.y*v.y + u.z*v.z
 
+	@staticmethod
+	def distance(u, v):
+		diff = PVector.sub(u, v)
+		return PVector.magnitude(diff)
+
+	@staticmethod
+	def limit(u, mag): 
+		return u
+
 	def __repr__(self):
 		return 'Point(x=%s, y=%s, z=%s)' % (self.x, self.y, self.z)
