@@ -1,4 +1,4 @@
-from math import pi, cos, sin, sqrt
+from math import pi, cos, sin, sqrt, radians
 from vector import PVector
 
 
@@ -30,28 +30,33 @@ class Torus:
 		f = PVector.div(force, self.mass)
 		self.acceleration.add(f)
 
-	def update(self):
+	def update(self, aspect, fovy):
+
 		self.velocity.add(self.acceleration)
 		self.location.add(self.velocity)
+		self._check_edges(aspect, fovy)
 		self.translate(self.location.x, self.location.y, self.location.z)
 
 		self.acceleration.mult(0)
 
-	def check_edges(self):
+	def _check_edges(self, aspect, fovy):
 
-		if self.location.x > 1:
-			self.location.x = 1
-			self.velocity.x *= -1
-		elif self.location.x < -1:
-			self.velocity.x *= -1
-			self.location.x = -1
+		limit_y = round(sin(radians(fovy/2))*-1*self.location.z, 2)
+		limit_x = round((aspect * (limit_y*2)) / 2, 2)
 
-		if self.location.y > 1:
+		if self.location.x > limit_x:
+			self.location.x = limit_x
+			self.velocity.x *= -1
+		elif self.location.x < -1*limit_x:
+			self.location.x = -1*limit_x
+			self.velocity.x *= -1
+
+		if self.location.y > limit_y:
 			self.velocity.y *= -1
-			self.location.y = 1
-		elif self.location.y < -1:
+			self.location.y = limit_y
+		elif self.location.y < -1*limit_y:
 			self.velocity.y *= -1
-			self.location.y = -1
+			self.location.y = -1*limit_y
 
 	def translate(self, x=0, y=0, z=0):
 		self.matrix[12] = x

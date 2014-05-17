@@ -5,8 +5,14 @@ import random
 from vector import PVector
 
 from torus import Torus
+from const import FRAME_PERIOD, INIT_WINDOW_SIZE, INIT_WINDOW_POSITION, \
+				  BACKGROUND_COLOR, TORUS_SIDES, TORUS_RINGS, TORUS_COLOR, \
+				  TORUS_INNER_RADIUS, TORUS_OUTTER_RADIUS, TORUS_MASS_RANGE, \
+				  TORUS_QUANTITY, FOVY, Z_NEAR, Z_FAR, FLUID_FORCE, GRAVITY_FORCE_FACTOR
 
 scene = []
+current_w = 0
+current_h = 0
 
 def display():
 	global scene
@@ -32,61 +38,66 @@ def display():
 
 	glutSwapBuffers()
 
-def reshape(x, y):
-	if y == 0 or x == 0:
+def reshape(w, h):
+	global current_w, current_h
+	if w == 0 or h == 0:
 		return
+
+	current_w = w
+	current_h = h
+
 	glMatrixMode(GL_PROJECTION)
 	glLoadIdentity()
-	gluPerspective(40.0, x/y, 0.5, 20.0)
+	gluPerspective(FOVY, float(w)/h, Z_NEAR, Z_FAR)
 
-	glViewport(0, 0, x, y)
+	glViewport(0, 0, w, h)
 	glMatrixMode(GL_MODELVIEW)
 	glutPostRedisplay()
 
-def idle():
+def timer(value):
 	global scene
 	if scene[1].is_colliding_with(scene[0]):
 			print 'Pode colidir!'
 
-	fluid = PVector(-0.1, 0)
+	fluid = PVector(*FLUID_FORCE)
 	for index, torus in enumerate(scene):
-		gravity = PVector(0, -0.01*torus.mass)
+		gravity = PVector(0, GRAVITY_FORCE_FACTOR*torus.mass)
 		if index == 1:
 			torus.apply_force(fluid)
 			torus.apply_force(gravity)
-		torus.update()
-		torus.check_edges()
+		torus.update(float(current_w)/current_h, FOVY)
 
 	display()
+	glutTimerFunc(FRAME_PERIOD, timer, 0)
 
 def main():
 	global scene
-	for x in range(2):
-		mass = random.uniform(0, 200)
-		location_x = 0#random.uniform(-1, 1)
-		location_y = 0 if x == 0 else 3#random.uniform(-1, 1)
-		location_z = 4#random.uniform(5, 6)
+	for x in range(TORUS_QUANTITY):
+		mass = random.uniform(*TORUS_MASS_RANGE)
+		location_x = 0
+		location_y = 0 if x == 0 else 3
+		location_z = 4
 		t = Torus(
-				 sides=40, 
-				 rings=300, 
-				 color=(1,0,0), 
+				 sides=TORUS_SIDES, 
+				 rings=TORUS_RINGS, 
+				 color=TORUS_COLOR, 
 				 location=(location_x, location_y, -1*location_z), 
-				 inner_radius=0, 
-				 outter_radius=0.03, 
+				 inner_radius=TORUS_INNER_RADIUS, 
+				 outter_radius=TORUS_OUTTER_RADIUS, 
 				 mass=mass
 				 )
 		scene.append(t)
 
 	glutInit(sys.argv)
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
-	glutInitWindowSize(800, 800)
-	glutInitWindowPosition(450, 200)
+	glutInitWindowSize(*INIT_WINDOW_SIZE)
+	glutInitWindowPosition(*INIT_WINDOW_POSITION)
 	glutCreateWindow("Torus")
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
-	glClearColor(0.0, 0.0, 0.0, 0.0)
+	glClearColor(*BACKGROUND_COLOR)
 	glutDisplayFunc(display)
 	glutReshapeFunc(reshape)
-	glutIdleFunc(idle)
+	glutTimerFunc(FRAME_PERIOD, timer, 0)
 	glutMainLoop()
 	return 0
 
