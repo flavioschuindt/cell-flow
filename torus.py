@@ -4,8 +4,8 @@ from vector import PVector
 
 class Torus:
 
-	def __init__(self, color, location, inner_radius=1, outter_radius=0.2, 
-				 sides=50, rings=50, mass=1, max_speed=0.01, max_force=0.03):
+	def __init__(self, color, location, inner_radius, outter_radius, 
+				 sides, rings, mass, max_speed, max_force):
 
 		self.inner_radius = inner_radius
 		self.outter_radius = outter_radius
@@ -87,58 +87,6 @@ class Torus:
 					z = a * sin(s * two_pi / self.sides)
 					k -= 1
 					self.points.append((x, y, z))
-
-	def is_colliding_with(self, t):
-		'''delta = PVector.sub(self.location, t.location)
-		delta_squared = PVector.square(delta)
-		sum_radius_squared = ((self.inner_radius + self.outter_radius) + (t.inner_radius + t.outter_radius)) ** 2
-
-		return ((delta_squared.x + delta_squared.y) <= sum_radius_squared)'''
-
-		'''
-			Test #1: If the length of the velocity vector is less than distance between the centers of the spheres minus 
-			their radius, there's no way they can hit.
-		'''
-		distance = PVector.magnitude(PVector.sub(self.location, t.location))
-		sum_radius = ((self.inner_radius + self.outter_radius) + (t.inner_radius + t.outter_radius))
-		velocity_mag = PVector.magnitude(self.velocity)
-		if velocity_mag < (distance - sum_radius):
-			return False
-
-		'''
-			Test #2: Make sure that A is moving towards B.
-		'''
-		n = PVector.normalize(self.velocity)
-		c = PVector.sub(t.location, self.location)
-		d = PVector.dot(n, c)
-		if d <= 0:
-			return False
-
-		f = (distance * distance) - (d * d) # Pitagoras' Theorem
-		sum_radius_squared = sum_radius * sum_radius
-
-		'''
-			Test #3: If the closest that A will get to B is more than the sum of their radius, 
-			there's no way they are going collide
-		'''
-		if f >= sum_radius_squared:
-			return False
-
-		s = sum_radius_squared - f
-		if s < 0:
-			return False
-		
-		'''
-			Test #4: The limit that the moving sphere can move without touch the static sphere is: limit = d - sqrt(t).
-			So, we should make sure that the distance the moving sphere A has to move to touch static sphere B is not greater
-			than the velocity magnitude.
-		'''
-
-		limit = d - sqrt(s)
-		if velocity_mag < limit:
-			return False
-
-		return True
 
 	def flock(self, scene, desired_separation):
 		sep = self.separate(scene, desired_separation)   # Separation

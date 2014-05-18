@@ -58,7 +58,29 @@ class PVector:
 		return PVector.magnitude(diff)
 
 	@staticmethod
-	def limit(u, mag): 
+	def limit(u, mag):
+		if PVector.magnitude(u) > mag:
+			a_b = a_c = 0
+			if u.y != 0:
+				a_b = float(u.x)/u.y
+				y2 = u.y ** 2
+			else:
+				y2 = 0.0
+			
+			if u.z != 0:
+				a_c = float(u.x)/u.z
+				z2 = u.z ** 2
+			else:
+				z2 = 0.0
+			
+			a = sqrt(float((mag ** 2))/(1 + y2 + z2))
+			b = a / a_b if a_b != 0 else 0.0
+			c = a / a_c if a_c != 0 else 0.0
+
+			limited_vector = PVector(a, b, c)
+
+			return limited_vector
+		
 		return u
 
 	def __repr__(self):
