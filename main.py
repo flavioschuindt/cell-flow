@@ -77,9 +77,9 @@ def main():
 	aspect = float(w) / h
 	for x in range(TORUS_QUANTITY):
 		mass = random.uniform(*TORUS_MASS_RANGE)
-		location_z = 16#random.uniform(Z_NEAR, Z_FAR)
-		limit_y = round(sin(radians(FOVY/2))*-1*location_z, 2)
-		limit_x = round((aspect * (limit_y*2)) / 2, 2)
+		location_z = 6#random.uniform(Z_NEAR, Z_FAR)
+		limit_y = 0#round(sin(radians(FOVY/2))*-1*location_z, 2)
+		limit_x = 0#round((aspect * (limit_y*2)) / 2, 2)
 		location_x = random.uniform(0, limit_x)
 		location_y = random.uniform(0, limit_y)
 		t = Torus(
