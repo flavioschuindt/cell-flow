@@ -1,8 +1,10 @@
 from math import pi, cos, sin, sqrt, radians
 from vector import PVector
-
+import itertools
 
 class Torus:
+
+	newid = itertools.count().next
 
 	def __init__(self, color, location, inner_radius, outter_radius, 
 				 sides, rings, mass, max_speed, max_force):
@@ -17,6 +19,7 @@ class Torus:
 		self.color = color
 		self.max_speed = max_speed
 		self.max_force = max_force
+		self.id = Torus.newid()
 		
 		self.points = []
 		self.matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]

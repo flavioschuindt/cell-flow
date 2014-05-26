@@ -12,6 +12,9 @@ from const import FRAME_PERIOD, INIT_WINDOW_SIZE, INIT_WINDOW_POSITION, \
 				  TORUS_QUANTITY, FOVY, Z_NEAR, Z_FAR, FLUID_FORCE, GRAVITY_FORCE_FACTOR, \
 				  TORUS_DESIRED_SEPARATION, TORUS_FLOCKING_MAX_SPEED, TORUS_FLOCKING_MAX_FORCE
 
+from grid import Grid
+
+grid = None
 scene = []
 current_w = 0
 current_h = 0
@@ -41,32 +44,47 @@ def display():
 	glutSwapBuffers()
 
 def reshape(w, h):
-	global current_w, current_h
+	global current_w, current_h, grid
 	if w == 0 or h == 0:
 		return
 
 	current_w = w
 	current_h = h
 
+	ar = float(w)/h
+
+	l_y = round(sin(radians(FOVY/2))*-1*-6, 2)
+	l_x = round((ar * (l_y*2)) / 2, 2)
+
+	grid = Grid(
+				width=l_x * 2, 
+				height=l_y * 2, 
+				cell_quantity=101
+				)
+
 	glMatrixMode(GL_PROJECTION)
 	glLoadIdentity()
-	gluPerspective(FOVY, float(w)/h, Z_NEAR, Z_FAR)
+	gluPerspective(FOVY, ar, Z_NEAR, Z_FAR)
 
 	glViewport(0, 0, w, h)
 	glMatrixMode(GL_MODELVIEW)
 	glutPostRedisplay()
 
 def timer(value):
-	global scene
+	global scene, grid
 
 	fluid = PVector(*FLUID_FORCE)
 	for index, torus in enumerate(scene):
 		gravity = PVector(0, GRAVITY_FORCE_FACTOR*torus.mass)
+		grid.remove(torus)
 		torus.apply_force(fluid)
 		torus.apply_force(gravity)
 		torus.update(float(current_w)/current_h, FOVY)
 		torus.flock(scene, TORUS_DESIRED_SEPARATION)
 		torus.translate(torus.location.x, torus.location.y, torus.location.z)
+		grid.insert(torus)
+
+	print grid.content
 
 	display()
 	glutTimerFunc(FRAME_PERIOD, timer, 0)
