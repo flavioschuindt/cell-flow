@@ -1,7 +1,9 @@
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from numpy import *
-from Image import *
+from PIL.Image import *
+from filter.filter import sobel
+import numpy as np
 
 class Material(object):
     def __init__(self):
@@ -57,18 +59,38 @@ class Texture(object):
         image = open(pathFile)
         ix = image.size[0]
         iy = image.size[1]
-        image = image.convert("RGBA").tostring("raw", "RGBA", 0, -1)
 
         # Create Texture
         if channel == self.DIFUSE:
+            image = image.convert("RGBA").tostring("raw", "RGBA", 0, -1)
             self.difuseMap = glGenTextures(1)
         elif channel == self.BUMP:
-            self.bumpMap = glGenTextures(1)
-        # glBindTexture(GL_TEXTURE_2D, int(texture))   # 2d texture (x and y size)
+            pass
+            # image = self.getBumpSpace(image)
+            # self.bumpMap = glGenTextures(1)
 
         # Create MipMapped Texture
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR)
         gluBuild2DMipmaps(GL_TEXTURE_2D, 3, ix, iy, GL_RGBA, GL_UNSIGNED_BYTE, image)
+
+    def getBumpSpace(self, img):
+        dx, dy = sobel(img,3)
+
+        list = np.array((len(dx[0]),len(dx[0])))
+        for j in range(0, len(dx)):
+            for i in range(0, len(dx[0])):
+                u = (dx[i][j]+255)/2
+                v = (dy[i][j]+255)/2
+                print u
+                # vet = np.cross(dx[i][j], dy[i][j])
+                # print vet
+                # print dx[i][j]
+                pass
+
+        # print list
+        return img
+
+
 
 __author__ = 'bruno'

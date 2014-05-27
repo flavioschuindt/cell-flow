@@ -36,16 +36,18 @@ fragment_shader = """
     {
         //vec3 light_direction = normalize(vec3(gl_LightSource[0].position.xyz - v));
 
+        vec3 vn = vertex_normal - normalize(vec3(texture2D(myTexture, vTexCoord.st).rgb));
+
         vec3 L = normalize(gl_LightSource[0].position.xyz - v);
-        vec3 E = normalize(-v); // we are in Eye Coordinates, so EyePos is (0,0,0)
-        vec3 R = normalize(L - 2.0 * vertex_normal * dot(L, vertex_normal));
+        vec3 E = normalize(v);
+        vec3 R = normalize(2.0 * vn * dot(L, vertex_normal) - L);
 
         //calculate Ambient Term:
         vec4 Iamb = gl_FrontLightProduct[0].ambient;
 
        //calculate Diffuse Term:
 
-        vec4 Idiff = gl_FrontLightProduct[0].diffuse * max(dot(vertex_normal,L), 0.0);
+        vec4 Idiff = gl_FrontLightProduct[0].diffuse * max(dot(vn,L), 0.0);
         Idiff = clamp(Idiff, 0.0, 1.0);
 
         // calculate Specular Term:
@@ -55,8 +57,8 @@ fragment_shader = """
         // write Total Color:
         //FALTA COLOCAR ATENUACAO
         vec4 texel = normalize(vec4(texture2D(myTexture, vTexCoord.st).rgba));
-        gl_FragColor = gl_FrontLightModelProduct.sceneColor + Iamb + Idiff + Ispec + texel;
-        //gl_FragColor = gl_FrontLightModelProduct.sceneColor + Iamb + Idiff + Ispec;
+        //gl_FragColor = gl_FrontLightModelProduct.sceneColor + Iamb + Idiff + Ispec + texel;
+        gl_FragColor = gl_FrontLightModelProduct.sceneColor + Iamb + Idiff + Ispec;
     }
 """
 
@@ -92,7 +94,7 @@ def init():
     light_ambient = [1.0, 1.0, 1.0, 1.0]
     light_diffuse = [1.0, 1.0, 1.0, 1.0]
     light_specular = [1.0, 1.0, 1.0, 1.0]
-    light_position = [1.0, 3.0, -3.5, 0.0]
+    light_position = array([1.0, 3.0, -3.5, 0.0]) * 10.0
     # [3.0, -1.0, 3.0, 0.0]
     glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient)
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse)
@@ -105,7 +107,7 @@ def init():
     glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient)
     glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse)
     glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular)
-    glLightfv(GL_LIGHT1, GL_POSITION, [-1.0, 1.0, -1.0, 0.0])
+    glLightfv(GL_LIGHT1, GL_POSITION, [-1.0, 1.0, 2.0, 0.0])
 
     glEnable(GL_LIGHT0)
     # glEnable(GL_LIGHT1)
