@@ -2,15 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8e8ccd81-e106-4d07-b860-693e913798dd" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/cell-flow.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/shaders/Shaders.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BACKUP/ShadersVELHO.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/shaders/__init__.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CellFlow.py" afterPath="$PROJECT_DIR$/CellFlow.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/display/Material.py" afterPath="$PROJECT_DIR$/display/Material.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/display/Obj.py" afterPath="$PROJECT_DIR$/display/Obj.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cell-flow.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,10 +31,28 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="CellFlow.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="CellFlow.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/CellFlow.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="120" column="19" selection-start="3736" selection-end="3736" vertical-scroll-proportion="0.26785713" vertical-offset="1680" max-vertical-offset="2895">
+            <state line="55" column="4" selection-start="1608" selection-end="1608" vertical-scroll-proportion="0.0" vertical-offset="630" max-vertical-offset="2055">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Shaders.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/shaders/Shaders.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="11" column="10" selection-start="397" selection-end="397" vertical-scroll-proportion="0.36830357" vertical-offset="0" max-vertical-offset="448">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ShadersVELHO.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BACKUP/ShadersVELHO.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="7" column="17" selection-start="190" selection-end="190" vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="990">
               <folding />
             </state>
           </provider>
@@ -45,7 +61,7 @@
       <file leaf-file-name="Obj.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/display/Obj.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="22" selection-start="719" selection-end="719" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="765">
+            <state line="30" column="8" selection-start="894" selection-end="894" vertical-scroll-proportion="-1.1481482" vertical-offset="359" max-vertical-offset="780">
               <folding />
             </state>
           </provider>
@@ -54,18 +70,7 @@
       <file leaf-file-name="Material.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/display/Material.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="25" selection-start="270" selection-end="273" vertical-scroll-proportion="0.0" vertical-offset="15" max-vertical-offset="1530">
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="filter.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/filter/filter.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="38" selection-start="459" selection-end="459" vertical-scroll-proportion="0.0" vertical-offset="240" max-vertical-offset="3945">
+            <state line="17" column="30" selection-start="504" selection-end="504" vertical-scroll-proportion="-6.6666665" vertical-offset="0" max-vertical-offset="1425">
               <folding />
             </state>
           </provider>
@@ -82,16 +87,20 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="iluminacao" />
+        <entry key="$PROJECT_DIR$" value="bump" />
       </map>
     </option>
   </component>
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/CellFlow.py" />
+        <option value="$PROJECT_DIR$/shaders/ShadersVelho.py" />
+        <option value="$PROJECT_DIR$/BACKUP/ShadersVelho.py" />
+        <option value="$PROJECT_DIR$/BACKUP/ShadersVELHO.py" />
         <option value="$PROJECT_DIR$/display/Material.py" />
+        <option value="$PROJECT_DIR$/CellFlow.py" />
         <option value="$PROJECT_DIR$/display/Obj.py" />
+        <option value="$PROJECT_DIR$/shaders/Shaders.py" />
       </list>
     </option>
   </component>
@@ -127,6 +136,16 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -142,6 +161,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="cell-flow" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cell-flow" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cell-flow" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="shaders" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -173,14 +206,18 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Project Files">
           <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cell-flow" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cell-flow" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BACKUP" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -188,7 +225,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Dropbox/MESTRADO/ICG/dojo" />
     <property name="recentsLimit" value="5" />
     <property name="FullScreen" value="false" />
   </component>
@@ -196,6 +233,15 @@
     <option name="myPythonConsoleState">
       <console-settings />
     </option>
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/BACKUP" />
+      <recent name="$PROJECT_DIR$/shaders" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/BACKUP" />
+    </key>
   </component>
   <component name="RunManager" selected="Python.CellFlow">
     <configuration default="false" name="CellFlow" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -391,19 +437,19 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16460906" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22139917" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3997175" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32909605" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32909605" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -425,6 +471,34 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/CellFlow.py">
       <provider selected="true" editor-type-id="text-editor">
+        <state line="48" column="0" selection-start="1522" selection-end="1522" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2895">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/display/Obj.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="37" selection-start="902" selection-end="902" vertical-scroll-proportion="0.0" vertical-offset="465" max-vertical-offset="795">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/display/Material.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="68" column="43" selection-start="2318" selection-end="2318" vertical-scroll-proportion="0.0" vertical-offset="825" max-vertical-offset="1560">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/filter/filter.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="38" selection-start="459" selection-end="459" vertical-scroll-proportion="0.0" vertical-offset="240" max-vertical-offset="3945">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CellFlow.py">
+      <provider selected="true" editor-type-id="text-editor">
         <state line="64" column="0" selection-start="2189" selection-end="2189" vertical-scroll-proportion="0.0" vertical-offset="645" max-vertical-offset="2895">
           <folding />
         </state>
@@ -440,9 +514,7 @@
     <entry file="file://$PROJECT_DIR$/display/Material.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="1" column="24" selection-start="48" selection-end="48" vertical-scroll-proportion="0.0" vertical-offset="15" max-vertical-offset="1530">
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -470,9 +542,7 @@
     <entry file="file://$PROJECT_DIR$/display/Material.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="67" column="12" selection-start="2198" selection-end="2198" vertical-scroll-proportion="0.0" vertical-offset="855" max-vertical-offset="1530">
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -500,9 +570,7 @@
     <entry file="file://$PROJECT_DIR$/display/Material.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="67" column="12" selection-start="2198" selection-end="2198" vertical-scroll-proportion="0.0" vertical-offset="855" max-vertical-offset="1530">
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -530,9 +598,7 @@
     <entry file="file://$PROJECT_DIR$/display/Material.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="84" column="23" selection-start="2850" selection-end="2850" vertical-scroll-proportion="0.0" vertical-offset="60" max-vertical-offset="1545">
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -550,32 +616,71 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/shaders_offest_offest.jpg">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/filter/filter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="38" selection-start="459" selection-end="459" vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="3930">
+        <state line="16" column="38" selection-start="459" selection-end="459" vertical-scroll-proportion="-0.036319613" vertical-offset="240" max-vertical-offset="3930">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shaders_offest_diffuse.jpg">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shaders_offest_complete.jpg">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shaders_offest_heightmap.jpg">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shaders/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="448">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BACKUP/ShadersVELHO.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="17" selection-start="190" selection-end="190" vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="990">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/display/Material.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="25" selection-start="270" selection-end="273" vertical-scroll-proportion="0.0" vertical-offset="15" max-vertical-offset="1530">
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/display/Obj.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="22" selection-start="719" selection-end="719" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="765">
+        <state line="17" column="30" selection-start="504" selection-end="504" vertical-scroll-proportion="-6.6666665" vertical-offset="0" max-vertical-offset="1425">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/CellFlow.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="120" column="19" selection-start="3736" selection-end="3736" vertical-scroll-proportion="0.26785713" vertical-offset="1680" max-vertical-offset="2895">
+        <state line="55" column="4" selection-start="1608" selection-end="1608" vertical-scroll-proportion="0.0" vertical-offset="630" max-vertical-offset="2055">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/display/Obj.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="8" selection-start="894" selection-end="894" vertical-scroll-proportion="-1.1481482" vertical-offset="359" max-vertical-offset="780">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shaders/Shaders.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="10" selection-start="397" selection-end="397" vertical-scroll-proportion="0.36830357" vertical-offset="0" max-vertical-offset="448">
           <folding />
         </state>
       </provider>

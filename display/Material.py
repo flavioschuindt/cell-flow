@@ -63,34 +63,32 @@ class Texture(object):
         # Create Texture
         if channel == self.DIFUSE:
             image = image.convert("RGBA").tostring("raw", "RGBA", 0, -1)
+            glActiveTexture(GL_TEXTURE0);
             self.difuseMap = glGenTextures(1)
+            imgName = self.difuseMap
         elif channel == self.BUMP:
-            pass
-            # image = self.getBumpSpace(image)
-            # self.bumpMap = glGenTextures(1)
+            glActiveTexture(GL_TEXTURE1);
+            image = image.convert("RGBA").tostring("raw", "RGBA", 0, -1)
+            self.bumpMap = glGenTextures(1)
+            imgName = self.bumpMap
 
         # Create MipMapped Texture
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR)
-        gluBuild2DMipmaps(GL_TEXTURE_2D, 3, ix, iy, GL_RGBA, GL_UNSIGNED_BYTE, image)
-
-    def getBumpSpace(self, img):
-        dx, dy = sobel(img,3)
-
-        list = np.array((len(dx[0]),len(dx[0])))
-        for j in range(0, len(dx)):
-            for i in range(0, len(dx[0])):
-                u = (dx[i][j]+255)/2
-                v = (dy[i][j]+255)/2
-                print u
-                # vet = np.cross(dx[i][j], dy[i][j])
-                # print vet
-                # print dx[i][j]
-                pass
-
-        # print list
-        return img
-
+        # glBindTexture(GL_TEXTURE_2D, imgName)
+        # glPixelStorei(GL_UNPACK_ALIGNMENT,1)
+        # glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, ix, iy, 0, GL_RGB, GL_UNSIGNED_BYTE, image)
+        # glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+        # glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR)
+        # gluBuild2DMipmaps(GL_TEXTURE_2D, 3, ix, iy, GL_RGBA, GL_UNSIGNED_BYTE, image)
+        # glBindTexture(GL_TEXTURE_2D, imgName)
+        #
+        # glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
+        # glTexImage2D(GL_TEXTURE_2D, 0, 3, ix, iy, 0, GL_RGBA, GL_UNSIGNED_BYTE, image)
+        #
+        # # Set other texture mapping parameters
+        # glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
+        # glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
+        # glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+        # glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
 
 
 __author__ = 'bruno'

@@ -4,65 +4,6 @@ from OpenGL.GL.VERSION.GL_1_1 import glLightfv
 if __name__ == '__build__':
     raise Exception
 
-"""
-Simple shader illumination example:
-Per-fragment specular component.
-"""
-
-# Vertex shader to compute per-vertex varying half-vectors and normals
-vertex_shader = """
-    varying vec3 vertex_normal;
-    varying vec3 half_vector;
-    varying vec3 v;
-    varying vec4 vTexCoord;
-    void main()
-    {
-        vTexCoord = gl_MultiTexCoord0;
-        vertex_normal = normalize(gl_NormalMatrix * gl_Normal);
-        half_vector = normalize(vec3(gl_LightSource[0].halfVector));
-        gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
-        v =vec3(gl_ModelViewMatrix * gl_Vertex);
-    }
-"""
-# Fragment shader to compute the color of a fragment based on a simple
-# illumination model (only specular)
-fragment_shader = """
-    varying vec3 vertex_normal;
-    varying vec3 half_vector;
-    varying vec3 v;
-    uniform sampler2D myTexture;
-    varying vec4 vTexCoord;
-    void main()
-    {
-        //vec3 light_direction = normalize(vec3(gl_LightSource[0].position.xyz - v));
-
-        vec3 vn = vertex_normal - normalize(vec3(texture2D(myTexture, vTexCoord.st).rgb));
-
-        vec3 L = normalize(gl_LightSource[0].position.xyz - v);
-        vec3 E = normalize(v);
-        vec3 R = normalize(2.0 * vn * dot(L, vertex_normal) - L);
-
-        //calculate Ambient Term:
-        vec4 Iamb = gl_FrontLightProduct[0].ambient;
-
-       //calculate Diffuse Term:
-
-        vec4 Idiff = gl_FrontLightProduct[0].diffuse * max(dot(vn,L), 0.0);
-        Idiff = clamp(Idiff, 0.0, 1.0);
-
-        // calculate Specular Term:
-        vec4 Ispec = gl_FrontLightProduct[0].specular * pow(max(dot(R, E), 0.0), 0.3 * gl_FrontMaterial.shininess);
-        Ispec = clamp(Ispec, 0.0, 1.0);
-
-        // write Total Color:
-        //FALTA COLOCAR ATENUACAO
-        vec4 texel = normalize(vec4(texture2D(myTexture, vTexCoord.st).rgba));
-        //gl_FragColor = gl_FrontLightModelProduct.sceneColor + Iamb + Idiff + Ispec + texel;
-        gl_FragColor = gl_FrontLightModelProduct.sceneColor + Iamb + Idiff + Ispec;
-    }
-"""
-
-
 import sys
 
 try:
@@ -74,7 +15,7 @@ try:
     # from display.BumpTeste import *
     from pyglsl import *
     from OpenGL.GL import shaders
-
+    from shaders.Shaders import *
     # from Camera import *
 except:
     print '''
@@ -82,6 +23,8 @@ ERROR: PyOpenGL not installed properly.
         '''
 current_w = 720
 current_h = 480
+global s
+s = Shaders()
 
 def init():
     glEnable(GL_LIGHTING)
@@ -114,7 +57,8 @@ def init():
 
     create_scene()
     global program
-    program = compile_program (vertex_shader, fragment_shader)
+    # program = compile_program (vertex_shader, fragment_shader)
+    program = compile_program (s.vertex_shader, s.fragment_shader)
     # glUseProgram(program)
 
 def display():
