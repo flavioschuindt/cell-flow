@@ -8,8 +8,8 @@ class Obj(object):
     def __init__(self):
         self.material = Material()
         self.material.set_shininess(15)
-        self.material.set_difuse(0.1)
-        self.material.set_specular(0.42)
+        self.material.set_difuse(1.0)
+        self.material.set_specular(1.0)
         self.material.enabled = True
         # self.material.set_map_difuse("Wall.bmp")
         # self.material.set_map_difuse("shaders_offest_offest.jpg")
@@ -25,11 +25,9 @@ class Obj(object):
     def display(self):
         self.material.display()
         glPushMatrix()
-
         # glTranslate(0.0, -0.1, -1.0)
         # glRotate(-120 , 1.0, 1.0, 0)
         # glScale(0.6, 0.6, 0.6)
-
         quad = gluNewQuadric()
         gluQuadricTexture(quad, True)
         gluSphere(quad, 0.2, 36, 36)

@@ -17,7 +17,7 @@ class Material(object):
         self.texture = Texture()
     def set_shininess(self,v):
         self.shininess = max(0.0, min(128.0, v))
-        print "SHININESS ->" +  str(self.shininess)
+        print "SHININESS ->" + str(self.shininess)
 
     def set_specular(self, v):
         self.specular = max(0.0, min(1.0, v))

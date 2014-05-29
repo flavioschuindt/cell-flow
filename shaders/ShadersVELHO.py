@@ -1,7 +1,7 @@
 class ShadersVELHO(object):
     def __init__(self):
 
-        self.vertex_shaderVelho = """
+        self.vertex_shader = """
     varying vec3 vertex_normal;
     varying vec3 half_vector;
     varying vec3 v;
@@ -19,7 +19,7 @@ class ShadersVELHO(object):
 """
 
 
-        self.fragment_shaderVelho = """
+        self.fragment_shader = """
     varying vec3 vertex_normal;
     varying vec3 half_vector;
     varying vec3 v;
