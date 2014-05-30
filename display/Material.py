@@ -15,6 +15,10 @@ class Material(object):
         # self.set_difuse(0.1)
         self.enabled = True
         self.texture = Texture()
+
+    def set_color(self,v):
+        self.difuseRGB = v
+
     def set_shininess(self,v):
         self.shininess = max(0.0, min(128.0, v))
         print "SHININESS ->" + str(self.shininess)

@@ -1,10 +1,7 @@
 # This is statement is required by the build system to query build info
-from OpenGL.GL.VERSION.GL_1_1 import glLightfv
 
 if __name__ == '__build__':
     raise Exception
-
-import sys
 
 try:
     from OpenGL.GL import *
@@ -16,7 +13,7 @@ try:
     from pyglsl import *
     from OpenGL.GL import shaders
     from shaders.Shaders import *
-
+    # from shaders.ShadersVELHO import *
     # from Camera import *
 except:
     print '''
@@ -25,6 +22,7 @@ ERROR: PyOpenGL not installed properly.
 current_w = 720
 current_h = 480
 global s
+# s = ShadersVelho()
 s = Shaders()
 
 def init():
@@ -38,28 +36,28 @@ def init():
     light_ambient = [1.0, 1.0, 1.0, 1.0]
     light_diffuse = [1.0, 1.0, 1.0, 1.0]
     light_specular = [1.0, 1.0, 1.0, 1.0]
-    light_position = array([1.0, 3.0, -3.5, 0.0]) * 10.0
+    light_position = array([-2.0, -2.0, 0.5, 0.0])
     # [3.0, -1.0, 3.0, 0.0]
     glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient)
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse)
     glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular)
     glLightfv(GL_LIGHT0, GL_POSITION, light_position)
-    # glLightfv(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.0)
-    # glLightfv(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0)
-    # glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.1)
+    # glLightfv(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 1)
+    # glLightfv(GL_LIGHT0, GL_LINEAR_ATTENUATION, 1)
+    glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 5)
 
     glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient)
     glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse)
     glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular)
-    glLightfv(GL_LIGHT1, GL_POSITION, [-1.0, 1.0, 2.0, 0.0])
+    glLightfv(GL_LIGHT1, GL_POSITION, [2.0, -3.0, 2.0, 0.0])
 
     glEnable(GL_LIGHT0)
-    # glEnable(GL_LIGHT1)
+    glEnable(GL_LIGHT1)
 
     create_scene()
     global program
     # program = compile_program (vertex_shader, fragment_shader)
-    program = compile_program (s.vertex_shader, s.fragment_shader)
+    program = compile_program (s.vertex_shader, s.fragment_shader_multi)
     # glUseProgram(program)
 
 def display():

@@ -8,8 +8,9 @@ class Obj(object):
     def __init__(self):
         self.material = Material()
         self.material.set_shininess(15)
-        self.material.set_difuse(1.0)
-        self.material.set_specular(1.0)
+        self.material.set_color(array([1.0, 0.0, 0.0, 1.0]))
+        self.material.set_difuse(0.5)
+        self.material.set_specular(0.2)
         self.material.enabled = True
         # self.material.set_map_difuse("Wall.bmp")
         # self.material.set_map_difuse("shaders_offest_offest.jpg")
