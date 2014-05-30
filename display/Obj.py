@@ -1,21 +1,31 @@
+from OpenGL.raw.GL.ARB.shader_objects import glUniform1iARB
 from OpenGL.GLUT import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from numpy import *
 from Material import *
+from pyglsl import *
+from shaders.Shaders import *
 
 class Obj(object):
     def __init__(self):
         self.material = Material()
         self.material.set_shininess(15)
-        self.material.set_color(array([1.0, 0.0, 0.0, 1.0]))
-        self.material.set_difuse(0.5)
+        self.material.set_color(array([1.0, 1.0, 0.0, 1.0]))
+        self.material.set_difuse(0.1)
         self.material.set_specular(0.2)
         self.material.enabled = True
-        # self.material.set_map_difuse("Wall.bmp")
-        # self.material.set_map_difuse("shaders_offest_offest.jpg")
+        self.material.set_map_difuse("shaders_offest_offest.jpg")
+        # self.material.set_map_difuse("shaders_offest_normalmap.jpg")
         self.material.set_map_bump("shaders_offest_normalmap.jpg")
-        # self.material.set_map_bump("Wall.bmp")
+
+        global s
+        s = Shaders()
+
+        global program
+        program = compile_program(s.vertex_shader, s.fragment_shader_multi)
+
+
 
     def enable_material(self):
         self.material.enabled = True
@@ -24,6 +34,12 @@ class Obj(object):
         self.material.enabled = False
 
     def display(self):
+        global program
+        glUseProgram(program)
+        texLoc = glGetUniformLocation(program, "Texture0")
+        glUniform1iARB(texLoc, 0)
+        texLoc = glGetUniformLocation(program, "Texture1")
+        glUniform1iARB(texLoc, 1)
         self.material.display()
         glPushMatrix()
         # glTranslate(0.0, -0.1, -1.0)

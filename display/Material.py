@@ -4,6 +4,7 @@ from numpy import *
 from PIL.Image import *
 from filter.filter import sobel
 import numpy as np
+import Image
 
 class Material(object):
     def __init__(self):
@@ -25,17 +26,19 @@ class Material(object):
 
     def set_specular(self, v):
         self.specular = max(0.0, min(1.0, v))
-        print "SPECULAR ->" +  str(self.specular)
+        print "SPECULAR ->" + str(self.specular)
 
     def set_difuse(self, v):
         self.difuse = max(0.0, min(1.0, v))
         print "DIFUSE ->" + str(self.difuse)
 
     def set_map_difuse(self, name):
-        self.texture.loadTextures( self.texture.DIFUSE, name)
+        glActiveTexture(GL_TEXTURE0)
+        self.texture.difuse_map = self.texture.loadTextures(name)
 
     def set_map_bump(self, name):
-        self.texture.loadTextures( self.texture.BUMP, name)
+        glActiveTexture(GL_TEXTURE1)
+        self.texture.bump_map = self.texture.loadTextures(name)
 
     def display(self):
         # Aplica caracteristicas do material ao objeto
@@ -51,48 +54,41 @@ class Material(object):
 
 class Texture(object):
     def __init__(self):
-        self.DIFUSE = 0
-        self.BUMP = 1
-        glEnable(GL_TEXTURE_2D)
-        self.difuseMap = []
-        self.bumpMap = []
+        self.difuse_map = []
+        self.bump_map = []
         # self.loadTextures("Wall.bmp")
         # self.difuseMap = self.loadTextures("Wall_bump.png")
 
-    def loadTextures(self, channel , pathFile):
-        image = open(pathFile)
-        ix = image.size[0]
-        iy = image.size[1]
+    def loadTextures(self, pathFile):
+        "Loads an image from a file as a texture"
+        # Read file and get pixels
+        imagefile = Image.open(pathFile)
+        sx,sy = imagefile.size[0:2]
+        global pixels
+        pixels = imagefile.convert("RGBA").tostring("raw", "RGBA", 0, -1)
 
-        # Create Texture
-        if channel == self.DIFUSE:
-            image = image.convert("RGBA").tostring("raw", "RGBA", 0, -1)
-            glActiveTexture(GL_TEXTURE0);
-            self.difuseMap = glGenTextures(1)
-            imgName = self.difuseMap
-        elif channel == self.BUMP:
-            glActiveTexture(GL_TEXTURE1);
-            image = image.convert("RGBA").tostring("raw", "RGBA", 0, -1)
-            self.bumpMap = glGenTextures(1)
-            imgName = self.bumpMap
+        # Create an OpenGL texture name and load image into it
+        image = glGenTextures(1)
 
-        # Create MipMapped Texture
-        # glBindTexture(GL_TEXTURE_2D, imgName)
-        # glPixelStorei(GL_UNPACK_ALIGNMENT,1)
-        # glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, ix, iy, 0, GL_RGB, GL_UNSIGNED_BYTE, image)
-        # glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-        # glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR)
-        # gluBuild2DMipmaps(GL_TEXTURE_2D, 3, ix, iy, GL_RGBA, GL_UNSIGNED_BYTE, image)
-        # glBindTexture(GL_TEXTURE_2D, imgName)
-        #
-        # glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
-        # glTexImage2D(GL_TEXTURE_2D, 0, 3, ix, iy, 0, GL_RGBA, GL_UNSIGNED_BYTE, image)
-        #
-        # # Set other texture mapping parameters
-        # glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
-        # glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
-        # glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-        # glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+        glBindTexture(GL_TEXTURE_2D,  image)
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
+
+        glTexImage2D(GL_TEXTURE_2D, 0, 3, sx, sy, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels)
+        gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, sx, sy, GL_RGBA, GL_UNSIGNED_BYTE, pixels)
+
+        # How mix with light
+        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE)
+
+        # How to Wrap
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
+
+        # How to filter MAG and MIN
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR)
+
+        # Return texture name (an integer)
+        return image
 
 
 __author__ = 'bruno'

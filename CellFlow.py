@@ -10,7 +10,6 @@ try:
     from array import array
     from display.Obj import *
     # from display.BumpTeste import *
-    from pyglsl import *
     from OpenGL.GL import shaders
     from shaders.Shaders import *
     # from shaders.ShadersVELHO import *
@@ -21,9 +20,6 @@ ERROR: PyOpenGL not installed properly.
         '''
 current_w = 720
 current_h = 480
-global s
-# s = ShadersVelho()
-s = Shaders()
 
 def init():
     glEnable(GL_LIGHTING)
@@ -37,14 +33,16 @@ def init():
     light_diffuse = [1.0, 1.0, 1.0, 1.0]
     light_specular = [1.0, 1.0, 1.0, 1.0]
     light_position = array([-2.0, -2.0, 0.5, 0.0])
-    # [3.0, -1.0, 3.0, 0.0]
+
     glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient)
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse)
     glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular)
     glLightfv(GL_LIGHT0, GL_POSITION, light_position)
+
+    # ENABLE LIGHT ATTENUATION
     # glLightfv(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 1)
     # glLightfv(GL_LIGHT0, GL_LINEAR_ATTENUATION, 1)
-    glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 5)
+    # glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 5)
 
     glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient)
     glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse)
@@ -54,18 +52,17 @@ def init():
     glEnable(GL_LIGHT0)
     glEnable(GL_LIGHT1)
 
-    create_scene()
-    global program
-    # program = compile_program (vertex_shader, fragment_shader)
-    program = compile_program (s.vertex_shader, s.fragment_shader_multi)
+
     # glUseProgram(program)
+
+    create_scene()
 
 def display():
     glUseProgram(0)
     glClearColor(1, 0.5, 0, 1)
     glClearDepth(1.0)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-    glUseProgram(program)
+
     print " display"
     glLoadIdentity()  # clear the matrix
     # view transformation
@@ -91,19 +88,19 @@ def reshape(w, h):
 
 
 def keyboard(key, x, y):
-    global fundo
+    global sphere
     if key == 'w':
-        fundo.material.set_shininess(fundo.material.shininess + 0.5)
+        sphere.material.set_shininess(sphere.material.shininess + 0.5)
     elif key == 'q':
-        fundo.material.set_shininess(fundo.material.shininess - 0.5)
+        sphere.material.set_shininess(sphere.material.shininess - 0.5)
     elif key == 's':
-        fundo.material.set_specular(fundo.material.specular + 0.02)
+        sphere.material.set_specular(sphere.material.specular + 0.02)
     elif key == 'a':
-        fundo.material.set_specular(fundo.material.specular - 0.02)
+        sphere.material.set_specular(sphere.material.specular - 0.02)
     elif key == 'x':
-        fundo.material.set_difuse(fundo.material.difuse + 0.02)
+        sphere.material.set_difuse(sphere.material.difuse + 0.02)
     elif key == 'z':
-        fundo.material.set_difuse(fundo.material.difuse - 0.02)
+        sphere.material.set_difuse(sphere.material.difuse - 0.02)
 
     glutPostRedisplay()
     if key == chr(27):
@@ -111,10 +108,11 @@ def keyboard(key, x, y):
         sys.exit(0)
 
 def create_scene():
-    global display_list, fundo
+    global display_list, sphere, program
     display_list = []
-    fundo = Obj()
-    display_list.append(fundo)
+    sphere = Obj()
+    display_list.append(sphere)
+
 
 glutInit(sys.argv)
 glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH | GLUT_ALPHA )
