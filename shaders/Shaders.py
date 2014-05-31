@@ -2,15 +2,27 @@ class Shaders(object):
     def __init__(self):
 
         self.vertex_shader = """
+        uniform sampler2D Texture0;
+        uniform sampler2D Texture1;
+        uniform sampler2D Texture2;
         varying vec3 N;
         varying vec3 v;
-        varying vec4 vTexCoord;
+        varying vec4 vTexCoord0;
+        varying vec4 vTexCoord1;
+        varying vec4 vTexCoord2;
         void main(void)
         {
-            vTexCoord = gl_MultiTexCoord0;
-            v = vec3(gl_ModelViewMatrix * gl_Vertex);
+            vTexCoord0 = gl_MultiTexCoord0;
+            vTexCoord1 = gl_MultiTexCoord1;
+            vTexCoord2 = gl_MultiTexCoord2;
+
             N = normalize(gl_NormalMatrix * gl_Normal);
+            vec3 color = normalize(texture2D(Texture2, vTexCoord2.st).rgb);
+
+            v = vec3(gl_ModelViewMatrix * gl_Vertex);
+
             gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+
         }
         """
         self.fragment_shader = """
@@ -19,6 +31,7 @@ class Shaders(object):
 
         void main (void)
         {
+           N = -N
            vec3 L = normalize(gl_LightSource[0].position.xyz - v);
            vec3 E = normalize(v); // we are in Eye Coordinates, so EyePos is (0,0,0)
            vec3 R = normalize(reflect(L,N));
@@ -44,7 +57,10 @@ class Shaders(object):
         self.fragment_shader_multi = """
         uniform sampler2D Texture0;
         uniform sampler2D Texture1;
-        varying vec4 vTexCoord;
+        uniform sampler2D Texture2;
+        varying vec4 vTexCoord0;
+        varying vec4 vTexCoord1;
+        varying vec4 vTexCoord2;
         varying vec3 N;
         varying vec3 v;
 
@@ -52,11 +68,13 @@ class Shaders(object):
 
         void main (void)
         {
-           //vec3 N = normalize(vN);
-           vec4 finalColor = vec4(0.0, 0.0, 0.0, 0.0);
+           vec4 finalColor = vec4(0.0, 0.0, 0.0, 1.0);
 
            for (int i=0;i<MAX_LIGHTS;i++)
            {
+              vec3 color = normalize(texture2D(Texture2, vTexCoord2.st).rgb);
+              //float factor = ((color[0]*2.0)-1.0);
+              float factor = (((0.30*color[0] + 0.59*color[1] + 0.11*color[2])*2.0)-1.0);
               vec3 nN = N;
               vec3 L = normalize(gl_LightSource[i].position.xyz - v);
               vec3 E = normalize(-v); // we are in Eye Coordinates, so EyePos is (0,0,0)
@@ -79,7 +97,7 @@ class Shaders(object):
               float c = gl_LightSource[i].quadraticAttenuation;
               float d = sqrt(pow(L.x,2) +pow(L.y,2) + pow(L.z,2)) ;
 
-              vec4 texel = normalize(vec4(texture2D(Texture0, vTexCoord.st).rgba));
+              vec4 texel = normalize(vec4(texture2D(Texture0, vTexCoord0.st).rgba));
               finalColor += Iamb + (Idiff + Ispec)/ (a + b*d + d*c) + texel;
               //finalColor += Iamb + (Idiff + Ispec)/ (a + b*d + d*c);
            }

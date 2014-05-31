@@ -66,7 +66,7 @@ def display():
     print " display"
     glLoadIdentity()  # clear the matrix
     # view transformation
-    gluLookAt(0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+    gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
 
     total = len(display_list)
     for i in range(0, total, 1):
@@ -86,9 +86,9 @@ def reshape(w, h):
     glMatrixMode(GL_MODELVIEW)
     print "reshape"
 
-
 def keyboard(key, x, y):
     global sphere
+
     if key == 'w':
         sphere.material.set_shininess(sphere.material.shininess + 0.5)
     elif key == 'q':
@@ -101,6 +101,8 @@ def keyboard(key, x, y):
         sphere.material.set_difuse(sphere.material.difuse + 0.02)
     elif key == 'z':
         sphere.material.set_difuse(sphere.material.difuse - 0.02)
+    elif(key == "r"):
+        sphere.rotation += 1
 
     glutPostRedisplay()
     if key == chr(27):

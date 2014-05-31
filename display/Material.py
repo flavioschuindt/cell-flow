@@ -40,6 +40,10 @@ class Material(object):
         glActiveTexture(GL_TEXTURE1)
         self.texture.bump_map = self.texture.loadTextures(name)
 
+    def set_map_displacement(self, name):
+        glActiveTexture(GL_TEXTURE2)
+        self.texture.displacement = self.texture.loadTextures(name)
+
     def display(self):
         # Aplica caracteristicas do material ao objeto
         difusePass = self.difuseRGB * self.difuse
@@ -56,6 +60,7 @@ class Texture(object):
     def __init__(self):
         self.difuse_map = []
         self.bump_map = []
+        self.displacement = []
         # self.loadTextures("Wall.bmp")
         # self.difuseMap = self.loadTextures("Wall_bump.png")
 
