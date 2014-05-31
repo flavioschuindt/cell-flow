@@ -3,12 +3,10 @@ from vector import PVector
 import itertools
 
 class Torus:
-
 	newid = itertools.count().next
 
 	def __init__(self, color, location, inner_radius, outter_radius, 
 				 sides, rings, mass, max_speed, max_force, obj):
-
 		self.inner_radius = inner_radius
 		self.outter_radius = outter_radius
 		self.sides = sides

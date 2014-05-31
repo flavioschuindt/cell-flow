@@ -1,3 +1,5 @@
+from OpenGL.GL.exceptional import glBegin
+from OpenGL.raw.GLUT import glutSolidSphere
 from OpenGL.raw.GL.ARB.shader_objects import glUniform1iARB
 from OpenGL.GLUT import *
 from OpenGL.GL import *
@@ -7,15 +9,14 @@ from Material import *
 from pyglsl import *
 from shaders.Shaders import *
 
-
 class Obj(object):
     def __init__(self, size):
         # MATERIAL
         self.material = Material()
         self.material.set_shininess(15)
         self.material.set_color(array([1.0, 0.0, 0.0, 1.0]))
-        self.material.set_difuse(0.1)
-        self.material.set_specular(0.2)
+        self.material.set_difuse(1.0)
+        self.material.set_specular(1.0)
         self.material.enabled = True
         self.size = size
         # self.material.set_map_difuse("assets/shaders_offest_offest.jpg")
@@ -48,14 +49,15 @@ class Obj(object):
         glPushMatrix()
 
         # glTranslate(0.0, -0.1, -1.0)
-        glRotate(self.rotation , 1.0, 0.5, 0)
+        # glRotate(self.rotation , 1.0, 0.5, 0)
         # glScale(0.6, 0.6, 0.6)
 
         #glCallList(self.obj_model.gl_list)
-
-        quad = gluNewQuadric()
-        gluQuadricTexture(quad, True)
-        gluSphere(quad, self.size, 64, 64)
+        # quad = gluNewQuadric()
+        # gluQuadricTexture(quad, True)
+        # gluSphere(quad, self.size, 16, 16)
+        # gluSphere(quad, 0.1, 16, 16)
+        glutSolidSphere(0.5, 10, 10)
         # gluCylinder(quad, 0.1, 0.1, 0.2, 10, 10)
         # glutSolidCube(0.2)
         # glBegin(GL_QUADS)
@@ -63,7 +65,6 @@ class Obj(object):
         # glTexCoord2f(1.0, 0.0); glVertex3f( 1.0, -1.0,  1.0)	# Bottom Right Of The Texture and Quad
         # glTexCoord2f(1.0, 1.0); glVertex3f( 1.0,  1.0,  1.0)	# Top Right Of The Texture and Quad
         # glTexCoord2f(0.0, 1.0); glVertex3f(-1.0,  1.0,  1.0)	# Top Left Of The Texture and Quad
-
         # glEnd()
         glPopMatrix()
 
