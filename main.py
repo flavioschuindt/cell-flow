@@ -14,6 +14,7 @@ from const import FRAME_PERIOD, INIT_WINDOW_SIZE, INIT_WINDOW_POSITION, \
 				  GRID_CELL_QUANTITY
 
 from grid import Grid
+from display.Obj import Obj
 
 grid = None
 scene = []
@@ -34,10 +35,12 @@ def display():
 
 		points = torus.calc_points() if len(torus.points) == 0 else torus.points
 
-		glBegin(GL_QUAD_STRIP)
+		'''glBegin(GL_QUAD_STRIP)
 		for point in points:
 			glVertex3d(*point)
-		glEnd()
+		glEnd()'''
+
+		torus.obj.display()
 
 		glPopMatrix()
 		glFlush()
@@ -107,7 +110,8 @@ def main():
 				 outter_radius=TORUS_OUTTER_RADIUS, 
 				 mass=mass,
 				 max_speed=TORUS_FLOCKING_MAX_SPEED,
-				 max_force=TORUS_FLOCKING_MAX_FORCE
+				 max_force=TORUS_FLOCKING_MAX_FORCE,
+				 obj=Obj(size=TORUS_INNER_RADIUS + 2*TORUS_OUTTER_RADIUS)
 				 )
 		scene.append(t)
 

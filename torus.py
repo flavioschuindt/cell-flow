@@ -7,7 +7,7 @@ class Torus:
 	newid = itertools.count().next
 
 	def __init__(self, color, location, inner_radius, outter_radius, 
-				 sides, rings, mass, max_speed, max_force):
+				 sides, rings, mass, max_speed, max_force, obj):
 
 		self.inner_radius = inner_radius
 		self.outter_radius = outter_radius
@@ -31,6 +31,9 @@ class Torus:
 		self.mass = mass
 		# Translate object to initial position
 		self.translate(self.location.x, self.location.y, self.location.z)
+
+		# Config material properties: texture and material
+		self.obj = obj
 
 	def apply_force(self, force):
 		f = PVector.div(force, self.mass)
