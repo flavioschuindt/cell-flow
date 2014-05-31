@@ -10,7 +10,8 @@ from const import FRAME_PERIOD, INIT_WINDOW_SIZE, INIT_WINDOW_POSITION, \
 				  BACKGROUND_COLOR, TORUS_SIDES, TORUS_RINGS, TORUS_COLOR, \
 				  TORUS_INNER_RADIUS, TORUS_OUTTER_RADIUS, TORUS_MASS_RANGE, \
 				  TORUS_QUANTITY, FOVY, Z_NEAR, Z_FAR, FLUID_FORCE, GRAVITY_FORCE_FACTOR, \
-				  TORUS_DESIRED_SEPARATION, TORUS_FLOCKING_MAX_SPEED, TORUS_FLOCKING_MAX_FORCE
+				  TORUS_DESIRED_SEPARATION, TORUS_FLOCKING_MAX_SPEED, TORUS_FLOCKING_MAX_FORCE, \
+				  GRID_CELL_QUANTITY
 
 from grid import Grid
 
@@ -31,10 +32,10 @@ def display():
 		glPushMatrix()
 		glMultMatrixf(torus.matrix)
 
-		points = torus.calc_points()
+		points = torus.calc_points() if len(torus.points) == 0 else torus.points
 
 		glBegin(GL_QUAD_STRIP)
-		for point in torus.points:
+		for point in points:
 			glVertex3d(*point)
 		glEnd()
 
@@ -59,7 +60,7 @@ def reshape(w, h):
 	grid = Grid(
 				width=l_x * 2, 
 				height=l_y * 2, 
-				cell_quantity=101
+				cell_quantity=GRID_CELL_QUANTITY
 				)
 
 	glMatrixMode(GL_PROJECTION)
@@ -72,7 +73,6 @@ def reshape(w, h):
 
 def timer(value):
 	global scene, grid
-
 	fluid = PVector(*FLUID_FORCE)
 	for index, torus in enumerate(scene):
 		gravity = PVector(0, GRAVITY_FORCE_FACTOR*torus.mass)
@@ -80,11 +80,9 @@ def timer(value):
 		torus.apply_force(fluid)
 		torus.apply_force(gravity)
 		torus.update(float(current_w)/current_h, FOVY)
-		torus.flock(scene, TORUS_DESIRED_SEPARATION)
+		torus.flock(grid.get_neighbors(torus), TORUS_DESIRED_SEPARATION)
 		torus.translate(torus.location.x, torus.location.y, torus.location.z)
 		grid.insert(torus)
-
-	print grid.content
 
 	display()
 	glutTimerFunc(FRAME_PERIOD, timer, 0)

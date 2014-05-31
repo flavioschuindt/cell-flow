@@ -90,6 +90,7 @@ class Torus:
 					z = a * sin(s * two_pi / self.sides)
 					k -= 1
 					self.points.append((x, y, z))
+		return self.points
 
 	def flock(self, scene, desired_separation):
 		sep = self.separate(scene, desired_separation)   # Separation
