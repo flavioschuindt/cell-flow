@@ -1,5 +1,7 @@
-import numpy as np
 from math import ceil
+
+import numpy as np
+
 
 class Grid:
 	def __init__(self, width, height, cell_quantity):

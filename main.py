@@ -1,9 +1,9 @@
+import random
+from math import radians, tan
+
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from OpenGL.GL import *
-import random
-from math import sin, radians
-
 from vector import PVector
 from torus import Torus
 from const import FRAME_PERIOD, INIT_WINDOW_SIZE, INIT_WINDOW_POSITION, \
@@ -12,13 +12,14 @@ from const import FRAME_PERIOD, INIT_WINDOW_SIZE, INIT_WINDOW_POSITION, \
 				  TORUS_QUANTITY, FOVY, Z_NEAR, Z_FAR, FLUID_FORCE, GRAVITY_FORCE_FACTOR, \
 				  TORUS_DESIRED_SEPARATION, TORUS_FLOCKING_MAX_SPEED, TORUS_FLOCKING_MAX_FORCE, \
 				  GRID_CELL_QUANTITY
-
 from grid import Grid
+
 
 grid = None
 scene = []
 current_w = 0
 current_h = 0
+far_z = 0
 
 def display():
 	global scene
@@ -27,9 +28,9 @@ def display():
 	for torus in scene:
 
 		glMatrixMode(GL_MODELVIEW)
-		glLoadIdentity()
 		glColor3f(*torus.color)
 		glPushMatrix()
+		glLoadIdentity()
 		glMultMatrixf(torus.matrix)
 
 		points = torus.calc_points() if len(torus.points) == 0 else torus.points
@@ -45,7 +46,7 @@ def display():
 	glutSwapBuffers()
 
 def reshape(w, h):
-	global current_w, current_h, grid
+	global current_w, current_h, grid, far_z
 	if w == 0 or h == 0:
 		return
 
@@ -53,9 +54,8 @@ def reshape(w, h):
 	current_h = h
 
 	ar = float(w)/h
-
-	l_y = round(sin(radians(FOVY/2))*-1*-6, 2)
-	l_x = round((ar * (l_y*2)) / 2, 2)
+	l_y = round(tan(radians(FOVY/2))*-1*far_z, 2)
+	l_x = round(ar * l_y, 2)
 
 	grid = Grid(
 				width=l_x * 2, 
@@ -88,16 +88,16 @@ def timer(value):
 	glutTimerFunc(FRAME_PERIOD, timer, 0)
 
 def main():
-	global scene
+	global scene, far_z
 	w, h = INIT_WINDOW_SIZE
 	aspect = float(w) / h
+	z_values = []
 	for x in range(TORUS_QUANTITY):
 		mass = random.uniform(*TORUS_MASS_RANGE)
 		location_z = 6#random.uniform(Z_NEAR, Z_FAR)
-		limit_y = 0#round(sin(radians(FOVY/2))*-1*location_z, 2)
-		limit_x = 0#round((aspect * (limit_y*2)) / 2, 2)
-		location_x = random.uniform(0, limit_x)
-		location_y = random.uniform(0, limit_y)
+		z_values.append(-1*location_z)
+		location_x = 0
+		location_y = 0
 		t = Torus(
 				 sides=TORUS_SIDES, 
 				 rings=TORUS_RINGS, 
@@ -110,6 +110,8 @@ def main():
 				 max_force=TORUS_FLOCKING_MAX_FORCE
 				 )
 		scene.append(t)
+
+	far_z = max(z_values)
 
 	glutInit(sys.argv)
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
