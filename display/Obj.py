@@ -9,9 +9,10 @@ from Material import *
 from pyglsl import *
 from shaders.Shaders import *
 from const import TORUS_COLOR
+from objloader import *
 
 class Obj(object):
-    def __init__(self, size):
+    def __init__(self, size, model):
         # MATERIAL
         self.material = Material()
         self.material.set_shininess(15)
@@ -27,7 +28,7 @@ class Obj(object):
         s = Shaders()
         self.shader_program = compile_program(s.vertex_shader, s.fragment_shader_multi)
         # MODELLING
-
+        self.model = OBJ(model)
         self.rotation = 0
 
 
@@ -51,14 +52,14 @@ class Obj(object):
 
         # glTranslate(0.0, -0.1, -1.0)
         # glRotate(self.rotation , 1.0, 0.5, 0)
-        # glScale(0.6, 0.6, 0.6)
-
+        glScale(self.size, self.size, self.size)
+        glCallList(self.model.gl_list)
         #glCallList(self.obj_model.gl_list)
         # quad = gluNewQuadric()
         # gluQuadricTexture(quad, True)
         # gluSphere(quad, self.size, 16, 16)
         # gluSphere(quad, 0.1, 16, 16)
-        glutSolidSphere(self.size, 10, 10)
+        # glutSolidSphere(self.size, 10, 10)
         # gluCylinder(quad, 0.1, 0.1, 0.2, 10, 10)
         # glutSolidCube(0.2)
         # glBegin(GL_QUADS)
