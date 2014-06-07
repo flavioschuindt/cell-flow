@@ -30,7 +30,7 @@ def display():
     for torus in scene:
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
-        glColor3f(*torus.color)
+        #glColor3f(*torus.color)
         glPushMatrix()
         glMultMatrixf(torus.matrix)
 
@@ -135,7 +135,7 @@ def init():
 	light_ambient = [1.0, 1.0, 1.0, 1.0]
 	light_diffuse = [1.0, 1.0, 1.0, 1.0]
 	light_specular = [1.0, 1.0, 1.0, 1.0]
-	light_position = array([0.0, 0.0, -3, 0.0])
+	light_position = [0.0, 0.0, -3, 0.0]
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient)
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse)
@@ -143,9 +143,13 @@ def init():
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position)
 
 	# ENABLE LIGHT ATTENUATION
-	# glLightfv(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 1)
-	# glLightfv(GL_LIGHT0, GL_LINEAR_ATTENUATION, 1)
-	# glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 5)
+	glLightfv(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 1)
+	glLightfv(GL_LIGHT0, GL_LINEAR_ATTENUATION, 1)
+	glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 5)
+
+	glLightfv(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 1)
+	glLightfv(GL_LIGHT1, GL_LINEAR_ATTENUATION, 1)
+	glLightfv(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 5)
 
 	glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient)
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse)
@@ -153,7 +157,7 @@ def init():
 	glLightfv(GL_LIGHT1, GL_POSITION, [2.0, -3.0, 2.0, 0.0])
 
 	glEnable(GL_LIGHT0)
-	#glEnable(GL_LIGHT1)
+	glEnable(GL_LIGHT1)
 
 def main():
 	global scene, far_z

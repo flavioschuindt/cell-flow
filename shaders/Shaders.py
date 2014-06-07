@@ -17,7 +17,6 @@ class Shaders(object):
             vTexCoord2 = gl_MultiTexCoord2;
 
             N = normalize(gl_NormalMatrix * gl_Normal);
-            vec3 color = normalize(texture2D(Texture2, vTexCoord2.st).rgb);
 
             v = vec3(gl_ModelViewMatrix * gl_Vertex);
 
@@ -64,12 +63,11 @@ class Shaders(object):
         varying vec3 N;
         varying vec3 v;
 
-        #define MAX_LIGHTS 1
+        #define MAX_LIGHTS 2
 
         void main (void)
         {
            vec4 finalColor = vec4(0.0, 0.0, 0.0, 1.0);
-
            for (int i=0;i<MAX_LIGHTS;i++)
            {
               vec3 color = normalize(texture2D(Texture2, vTexCoord2.st).rgb);
@@ -97,9 +95,9 @@ class Shaders(object):
               float c = gl_LightSource[i].quadraticAttenuation;
               float d = sqrt(pow(L.x,2) +pow(L.y,2) + pow(L.z,2)) ;
 
-              vec4 texel = normalize(vec4(texture2D(Texture0, vTexCoord0.st).rgba));
+              vec4 texel = vec4(texture2D(Texture0, vTexCoord0.st).rgba);
               //finalColor += Iamb + (Idiff + Ispec)/ (a + b*d + d*c) + texel;
-              finalColor += Iamb + (Idiff + Ispec)/ (a + b*d + d*c);
+              finalColor += (Iamb + Idiff + Ispec)/ (a + b*d + d*c);
            }
            // write Total Color:
            gl_FragColor = gl_FrontLightModelProduct.sceneColor + finalColor;

@@ -8,18 +8,19 @@ from numpy import *
 from Material import *
 from pyglsl import *
 from shaders.Shaders import *
+from const import TORUS_COLOR
 
 class Obj(object):
     def __init__(self, size):
         # MATERIAL
         self.material = Material()
         self.material.set_shininess(15)
-        self.material.set_color(array([1.0, 0.0, 0.0, 1.0]))
+        self.material.set_color(array(TORUS_COLOR))
         self.material.set_difuse(1.0)
         self.material.set_specular(1.0)
         self.material.enabled = True
         self.size = size
-        # self.material.set_map_difuse("assets/shaders_offest_offest.jpg")
+        #self.material.set_map_difuse("assets/shaders_offest_diffuse.jpg")
         # self.material.set_map_bump("assets/shaders_offest_normalmap.jpg")
         # self.material.set_map_displacement("assets/shaders_displacement.png")
         # SHADER
@@ -38,14 +39,14 @@ class Obj(object):
 
     def display(self):
         glUseProgram(self.shader_program)
-        # texLoc = glGetUniformLocation(self.shader_program, "Texture0")
-        # glUniform1iARB(texLoc, 0)
-        # texLoc = glGetUniformLocation(self.shader_program, "Texture1")
-        # glUniform1iARB(texLoc, 1)
-        # texLoc = glGetUniformLocation(self.shader_program, "Texture2")
-        # glUniform1iARB(texLoc, 2)
+        '''texLoc = glGetUniformLocation(self.shader_program, "Texture0")
+        glUniform1iARB(texLoc, 0)
+        texLoc = glGetUniformLocation(self.shader_program, "Texture1")
+        glUniform1iARB(texLoc, 1)
+        texLoc = glGetUniformLocation(self.shader_program, "Texture2")
+        glUniform1iARB(texLoc, 2)'''
 
-        # self.material.display()
+        self.material.display()
         glPushMatrix()
 
         # glTranslate(0.0, -0.1, -1.0)

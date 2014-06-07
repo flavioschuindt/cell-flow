@@ -10,8 +10,8 @@ class Material(object):
         self.shininess = 0
         self.specular = 1.0
         self.difuse = 1.0
-        self.specularRGB = array([1.0, 1.0, 1.0, 1.0])
-        self.difuseRGB = array([1.0, 1.0, 1.0, 1.0])
+        self.specularRGB = np.array([1.0, 1.0, 1.0, 1.0])
+        self.difuseRGB = np.array([1.0, 1.0, 1.0, 1.0])
         # self.set_difuse(0.1)
         self.enabled = True
         self.texture = Texture()
