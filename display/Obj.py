@@ -57,7 +57,7 @@ class Obj(object):
         # gluQuadricTexture(quad, True)
         # gluSphere(quad, self.size, 16, 16)
         # gluSphere(quad, 0.1, 16, 16)
-        glutSolidSphere(0.5, 10, 10)
+        glutSolidSphere(self.size, 10, 10)
         # gluCylinder(quad, 0.1, 0.1, 0.2, 10, 10)
         # glutSolidCube(0.2)
         # glBegin(GL_QUADS)

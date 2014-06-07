@@ -1,6 +1,8 @@
-from math import pi, cos, sin, sqrt, radians
-from vector import PVector
+from math import pi, cos, sin, radians, tan
 import itertools
+
+from vector import PVector
+
 
 class Torus:
 	newid = itertools.count().next
@@ -47,8 +49,8 @@ class Torus:
 
 	def _check_edges(self, aspect, fovy):
 
-		limit_y = round(sin(radians(fovy/2))*-1*self.location.z, 2)
-		limit_x = round((aspect * (limit_y*2)) / 2, 2)
+		limit_y = round(tan(radians(fovy/2))*-1*self.location.z, 2)
+		limit_x = round(aspect * limit_y, 2)
 
 		if self.location.x > limit_x:
 			self.location.x = limit_x
@@ -95,16 +97,7 @@ class Torus:
 
 	def flock(self, scene, desired_separation):
 		sep = self.separate(scene, desired_separation)   # Separation
-		#PVector ali = align(boids)      # Alignment
-		#PVector coh = cohesion(boids)   # Cohesion
-		# Arbitrarily weight these forces
-		#sep.mult(1.5);
-		#ali.mult(1.0);
-		#coh.mult(1.0);
-		# Add the force vectors to acceleration
 		self.apply_force(sep)
-		#self.apply_force(ali)
-		#self.apply_force(coh)
 
   	# Separation
   	# Method checks for nearby torus and steers away

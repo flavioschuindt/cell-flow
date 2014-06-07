@@ -3,7 +3,7 @@ from OpenGL.GLU import *
 from OpenGL.GL import *
 from display.Obj import *
 import random
-from math import sin, radians
+from math import tan, radians
 
 from vector import PVector
 from torus import Torus
@@ -15,17 +15,16 @@ from const import FRAME_PERIOD, INIT_WINDOW_SIZE, INIT_WINDOW_POSITION, \
 				  GRID_CELL_QUANTITY
 
 from grid import Grid
-from display.Obj import Obj
+
 
 grid = None
 scene = []
 current_w = 0
 current_h = 0
+far_z = 0
 
-global obj
-obj = Obj(1.0)
 def display():
-    global scene,obj
+    global scene
     # clear the drawing buffer.
     glClear(GL_COLOR_BUFFER_BIT)
     for torus in scene:
@@ -45,11 +44,10 @@ def display():
         torus.obj.display()
         glPopMatrix()
         glFlush()
-    obj.display()
     glutSwapBuffers()
 
 def reshape(w, h):
-	global current_w, current_h, grid
+	global current_w, current_h, grid, far_z
 	if w == 0 or h == 0:
 		return
 
@@ -57,9 +55,8 @@ def reshape(w, h):
 	current_h = h
 
 	ar = float(w)/h
-
-	l_y = round(sin(radians(FOVY/2))*-1*-6, 2)
-	l_x = round((ar * (l_y*2)) / 2, 2)
+	l_y = round(tan(radians(FOVY/2))*-1*far_z, 2)
+	l_x = round(ar * l_y, 2)
 
 	grid = Grid(
 				width=l_x * 2, 
@@ -115,73 +112,78 @@ def keyboard(key, x, y):
         sys.exit(0)
 
 def init():
-    glEnable(GL_LIGHTING)
-    glEnable(GL_NORMALIZE)
-    glEnable(GL_TEXTURE_2D)
 
-    # glShadeModel(GL_FLAT)
-    glShadeModel(GL_SMOOTH)
+	glutInit(sys.argv)
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
+	glutInitWindowSize(*INIT_WINDOW_SIZE)
+	glutInitWindowPosition(*INIT_WINDOW_POSITION)
+	glutCreateWindow("Torus")
+	# glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
+	glClearColor(*BACKGROUND_COLOR)
+	glutDisplayFunc(display)
+	glutReshapeFunc(reshape)
+	glutTimerFunc(FRAME_PERIOD, timer, 0)
+	glutKeyboardFunc(keyboard)
 
-    light_ambient = [1.0, 1.0, 1.0, 1.0]
-    light_diffuse = [1.0, 1.0, 1.0, 1.0]
-    light_specular = [1.0, 1.0, 1.0, 1.0]
-    light_position = array([-2.0, -2.0, 0.5, 0.0])
+	glEnable(GL_LIGHTING)
+	glEnable(GL_NORMALIZE)
+	glEnable(GL_TEXTURE_2D)
 
-    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient)
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse)
-    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular)
-    glLightfv(GL_LIGHT0, GL_POSITION, light_position)
+	# glShadeModel(GL_FLAT)
+	glShadeModel(GL_SMOOTH)
 
-    # ENABLE LIGHT ATTENUATION
-    # glLightfv(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 1)
-    # glLightfv(GL_LIGHT0, GL_LINEAR_ATTENUATION, 1)
-    # glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 5)
+	light_ambient = [1.0, 1.0, 1.0, 1.0]
+	light_diffuse = [1.0, 1.0, 1.0, 1.0]
+	light_specular = [1.0, 1.0, 1.0, 1.0]
+	light_position = array([0.0, 0.0, -3, 0.0])
 
-    glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient)
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse)
-    glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular)
-    glLightfv(GL_LIGHT1, GL_POSITION, [2.0, -3.0, 2.0, 0.0])
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient)
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse)
+	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular)
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position)
 
-    glEnable(GL_LIGHT0)
-    glEnable(GL_LIGHT1)
+	# ENABLE LIGHT ATTENUATION
+	# glLightfv(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 1)
+	# glLightfv(GL_LIGHT0, GL_LINEAR_ATTENUATION, 1)
+	# glLightfv(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 5)
+
+	glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient)
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse)
+	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular)
+	glLightfv(GL_LIGHT1, GL_POSITION, [2.0, -3.0, 2.0, 0.0])
+
+	glEnable(GL_LIGHT0)
+	#glEnable(GL_LIGHT1)
 
 def main():
-    global scene
-    w, h = INIT_WINDOW_SIZE
-    aspect = float(w) / h
-    for x in range(TORUS_QUANTITY):
-        mass = random.uniform(*TORUS_MASS_RANGE)
-        location_z = 6#random.uniform(Z_NEAR, Z_FAR)
-        limit_y = 0#round(sin(radians(FOVY/2))*-1*location_z, 2)
-        limit_x = 0#round((aspect * (limit_y*2)) / 2, 2)
-        location_x = random.uniform(0, limit_x)
-        location_y = random.uniform(0, limit_y)
-        t = Torus(
-                 sides=TORUS_SIDES,
-                 rings=TORUS_RINGS,
-                 color=TORUS_COLOR,
-                 location=(location_x, location_y, -1*location_z),
-                 inner_radius=TORUS_INNER_RADIUS,
-                 outter_radius=TORUS_OUTTER_RADIUS,
-                 mass=mass,
-                 max_speed=TORUS_FLOCKING_MAX_SPEED,
-                 max_force=TORUS_FLOCKING_MAX_FORCE,
-                 obj=Obj(size=TORUS_INNER_RADIUS + 2*TORUS_OUTTER_RADIUS)
-                 )
-        scene.append(t)
+	global scene, far_z
+	w, h = INIT_WINDOW_SIZE
+	aspect = float(w) / h
+	z_values = []
+	init()
+	for x in range(TORUS_QUANTITY):
+		mass = random.uniform(*TORUS_MASS_RANGE)
+		location_z = 2#random.uniform(Z_NEAR, Z_FAR)
+		z_values.append(-1*location_z)
+		location_x = 0
+		location_y = 0
+		t = Torus(
+				 sides=TORUS_SIDES, 
+				 rings=TORUS_RINGS, 
+				 color=TORUS_COLOR, 
+				 location=(location_x, location_y, -1*location_z), 
+				 inner_radius=TORUS_INNER_RADIUS, 
+				 outter_radius=TORUS_OUTTER_RADIUS, 
+				 mass=mass,
+				 max_speed=TORUS_FLOCKING_MAX_SPEED,
+				 max_force=TORUS_FLOCKING_MAX_FORCE,
+				 obj=Obj(size=TORUS_INNER_RADIUS + 2*TORUS_OUTTER_RADIUS)
+				 )
+		scene.append(t)
 
-    glutInit(sys.argv)
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
-    glutInitWindowSize(*INIT_WINDOW_SIZE)
-    glutInitWindowPosition(*INIT_WINDOW_POSITION)
-    glutCreateWindow("Torus")
-    # glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
-    glClearColor(*BACKGROUND_COLOR)
-    glutDisplayFunc(display)
-    glutReshapeFunc(reshape)
-    glutTimerFunc(FRAME_PERIOD, timer, 0)
-    glutKeyboardFunc(keyboard)
-    glutMainLoop()
-    return 0
+	far_z = max(z_values)
+	
+	glutMainLoop()
+	return 0
 
 if __name__  == '__main__': main()
