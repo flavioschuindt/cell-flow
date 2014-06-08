@@ -83,6 +83,7 @@ def display():
 
         glPushMatrix()
         glMultMatrixf(torus.matrix)
+        glRotate(45, 1, 0, 0)
 
         points = torus.calc_points() if len(torus.points) == 0 else torus.points
 
@@ -102,7 +103,7 @@ def reshape(w, h):
     current_h = h
 
     ar = float(w)/h
-    l_y = round(tan(radians(FOVY/2))*-1*far_z, 2)
+    l_y = round(tan(radians(FOVY/2))*far_z, 2)
     l_x = round(ar * l_y, 2)
 
     grid = Grid(
@@ -125,7 +126,7 @@ def init():
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
 
     pygame.init()
-    viewport = (800, 600)
+    viewport = INIT_WINDOW_SIZE
     hx = viewport[0] / 2
     hy = viewport[1] / 2
     srf = pygame.display.set_mode(viewport, OPENGL | DOUBLEBUF)
@@ -189,7 +190,6 @@ def main():
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
     width, height = viewport
-    gluPerspective(90.0, width / float(height), 1, 100.0)
     # glEnable(GL_DEPTH_TEST)
     glMatrixMode(GL_MODELVIEW)
 
@@ -203,8 +203,8 @@ def main():
     init()
     for x in range(TORUS_QUANTITY):
         mass = random.uniform(*TORUS_MASS_RANGE)
-        location_z = 2#random.uniform(Z_NEAR, Z_FAR)
-        z_values.append(-1*location_z)
+        location_z = random.uniform(Z_NEAR, Z_FAR)
+        z_values.append(location_z)
         location_x = 0
         location_y = 0
         t = Torus(
@@ -223,7 +223,6 @@ def main():
 
     far_z = max(z_values)
     reshape(*viewport)
-    #glutMainLoop()
     while 1:
         clock.tick(30)
         for e in pygame.event.get():
