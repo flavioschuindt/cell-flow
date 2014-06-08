@@ -54,14 +54,14 @@ def reshape(w, h):
 	current_h = h
 
 	ar = float(w)/h
-	l_y = round(tan(radians(FOVY/2))*-1*far_z, 2)
+	l_y = round(tan(radians(FOVY/2))*far_z, 2)
 	l_x = round(ar * l_y, 2)
 
 	grid = Grid(
-				width=l_x * 2, 
-				height=l_y * 2, 
-				cell_quantity=GRID_CELL_QUANTITY
-				)
+			width=l_x * 2, 
+			height=l_y * 2, 
+			cell_quantity=GRID_CELL_QUANTITY
+			)
 
 	glMatrixMode(GL_PROJECTION)
 	glLoadIdentity()
@@ -94,8 +94,8 @@ def main():
 	z_values = []
 	for x in range(TORUS_QUANTITY):
 		mass = random.uniform(*TORUS_MASS_RANGE)
-		location_z = 6#random.uniform(Z_NEAR, Z_FAR)
-		z_values.append(-1*location_z)
+		location_z = random.uniform(Z_NEAR, Z_FAR)
+		z_values.append(location_z)
 		location_x = 0
 		location_y = 0
 		t = Torus(

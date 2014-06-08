@@ -40,6 +40,10 @@ class Grid:
 			grid_position_x = x_middle + cell_offset_x
 			grid_position_y = y_middle + cell_offset_y
 
+		# Clamp between 0 and grid_shape
+		grid_position_x = max(0, min(grid_position_x, self.grid_shape[0]-1))
+		grid_position_y = max(0, min(grid_position_y, self.grid_shape[1]-1))
+
 		return (grid_position_y, grid_position_x)
 
 	def insert(self, torus):
