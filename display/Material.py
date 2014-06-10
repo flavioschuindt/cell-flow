@@ -45,10 +45,21 @@ class Material(object):
 
     def display(self):
         # Aplica caracteristicas do material ao objeto
-        difusePass = self.difuseRGB * self.difuse
-        difusePass[3] = 1.0 # Corrige o alpha
-        specularPass = self.specularRGB * self.specular
-        specularPass[3] = 1.0 # Corrige o alpha
+        # difusePass = self.difuseRGB * self.difuse
+        difusePass = [0,0,0,0]
+        difusePass[0] = self.difuseRGB[0] * self.difuse
+        difusePass[1] = self.difuseRGB[1] * self.difuse
+        difusePass[2] = self.difuseRGB[2] * self.difuse
+        difusePass[3] = 1.0
+        # difusePass[3] = 1.0 # Corrige o alpha
+        # specularPass = self.specularRGB * self.specular
+        # specularPass[3] = 1.0 # Corrige o alpha
+        #
+        specularPass = [0, 0, 0, 0]
+        specularPass[0] = self.specularRGB[0] * self.specular
+        specularPass[1] = self.specularRGB[1] * self.specular
+        specularPass[2] = self.specularRGB[2] * self.specular
+        specularPass[3] = 1.0
 
         if self.enabled:
             glMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, difusePass)

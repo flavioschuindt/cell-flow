@@ -57,6 +57,7 @@ class Shaders(object):
         uniform sampler2D Texture0;
         uniform sampler2D Texture1;
         uniform sampler2D Texture2;
+        uniform int hasTexture;
         varying vec4 vTexCoord0;
         varying vec4 vTexCoord1;
         varying vec4 vTexCoord2;
@@ -96,8 +97,11 @@ class Shaders(object):
               float d = sqrt(pow(L.x,2) +pow(L.y,2) + pow(L.z,2)) ;
 
               vec4 texel = vec4(texture2D(Texture0, vTexCoord0.st).rgba);
-              //finalColor += Iamb + (Idiff + Ispec)/ (a + b*d + d*c) + texel;
-              finalColor += (Iamb + Idiff + Ispec)/ (a + b*d + d*c);
+              if(hasTexture == 1){
+                finalColor += (Iamb +((Idiff + Ispec)/ (a + b*d + d*c))) * texel;
+              }else{
+                finalColor += Iamb + (Idiff + Ispec)/ (a + b*d + d*c);
+              }
            }
            // write Total Color:
            gl_FragColor = gl_FrontLightModelProduct.sceneColor + finalColor;

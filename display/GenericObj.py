@@ -11,7 +11,7 @@ from shaders.Shaders import *
 from const import TORUS_COLOR
 from objloader import *
 
-class Obj(object):
+class GenericObj(object):
     def __init__(self, size, model):
         # MATERIAL
         self.material = Material()
@@ -21,7 +21,7 @@ class Obj(object):
         self.material.set_specular(1.0)
         self.material.enabled = True
         self.size = size
-        #self.material.set_map_difuse("assets/shaders_offest_diffuse.jpg")
+        # self.material.set_map_difuse("assets/shaders_offest_diffuse.jpg")
         # self.material.set_map_bump("assets/shaders_offest_normalmap.jpg")
         # self.material.set_map_displacement("assets/shaders_displacement.png")
         # SHADER
@@ -40,6 +40,9 @@ class Obj(object):
 
     def display(self):
         glUseProgram(self.shader_program)
+        texLoc = glGetUniformLocation(self.shader_program, "hasTexture")
+        glUniform1iARB(texLoc, 0)  # 0 quando tem texto 1 quando nao tem
+
         '''texLoc = glGetUniformLocation(self.shader_program, "Texture0")
         glUniform1iARB(texLoc, 0)
         texLoc = glGetUniformLocation(self.shader_program, "Texture1")
