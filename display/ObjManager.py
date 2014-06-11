@@ -39,7 +39,7 @@ class ObjManager(object):
             self.pool.append(t)
         self.far_z = max(self.z_values)
 
-    def update(self):
+    def update(self, aspect):
         global scene, grid
         fluid = PVector(*FLUID_FORCE)
         for index, torus in enumerate(self.pool):

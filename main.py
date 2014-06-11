@@ -46,7 +46,7 @@ def display():
     # glutSolidSphere(0.5, 16,16)
     # glCallList(artery.model.gl_list)
     artery.display()
-    blood.update()
+    blood.update(aspect=float(current_w)/current_h)
     blood.display()
     pygame.display.flip()
 
