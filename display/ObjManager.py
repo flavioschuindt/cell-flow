@@ -13,21 +13,16 @@ class ObjManager(object):
     def __init__(self):
         self.pool = []
         self.far_z = []
-        self.w, self.h = INIT_WINDOW_SIZE
         self.z_values = []
-        self.grid = Grid(
-            width= self.w * 2,
-            height=self.h * 2,
-            cell_quantity=GRID_CELL_QUANTITY
-        )
+        self.grid = None
 
     def create(self):
         for x in range(TORUS_QUANTITY):
             mass = random.uniform(*TORUS_MASS_RANGE)
             location_z = random.uniform(Z_NEAR, Z_FAR)
             self.z_values.append(location_z)
-            location_x = 0
-            location_y = 0
+            location_x = random.uniform(0, 0.03)
+            location_y = random.uniform(0, 0.03)
             t = Torus(
                 sides=TORUS_SIDES,
                 rings=TORUS_RINGS,
@@ -70,6 +65,13 @@ class ObjManager(object):
             points = torus.calc_points() if len(torus.points) == 0 else torus.points
             torus.obj.display()
             glPopMatrix()
+
+    def recreate_grid(self, l_x, l_y, cell_quantity):
+        self.grid = Grid(
+                width=l_x,
+                height=l_y,
+                cell_quantity=cell_quantity
+                )
 
 
 

@@ -22,17 +22,24 @@ artery = None
 blood = None
 
 def reshape(w, h):
-    global current_w, current_h
+    global current_w, current_h, blood
     current_w = w
     current_h = h
+
+    ar = float(w)/h
+    l_y = round(tan(radians(FOVY/2))*blood.far_z, 2) * 2
+    l_x = round(ar * l_y, 2) * 2
+
+    blood.recreate_grid(l_x=l_x, l_y=l_y, cell_quantity=GRID_CELL_QUANTITY)
+
     glViewport(0, 0, current_w, current_h)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluPerspective(45, w * 1.0 / h, 0, 100)
+    gluPerspective(FOVY, ar, Z_NEAR, Z_FAR)
     glMatrixMode(GL_MODELVIEW)
 
 def display():
-    global current_w, current_h, artery
+    global current_w, current_h, artery, blood
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
     # glTranslate(0, 0, -2)
@@ -45,6 +52,14 @@ def display():
 
 def create_scene():
     global artery, blood
+
+    w, h = INIT_WINDOW_SIZE
+    glViewport(0, 0, current_w, current_h)
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    gluPerspective(FOVY, float(w)/h, Z_NEAR, Z_FAR)
+    glMatrixMode(GL_MODELVIEW)
+
     artery = GenericObj(1.0, "veia.obj")
     # artery.material.difuseRGB =[0.0, 0.0, 0.0,0.0]
     artery.material.set_difuse(0.3)
@@ -52,8 +67,11 @@ def create_scene():
     artery.material.set_shininess(100)
     blood = ObjManager()
     blood.create()
+    w, h = INIT_WINDOW_SIZE
+    l_y = round(tan(radians(FOVY/2))*blood.far_z, 2) * 2
+    l_x = round(float(w)/h * l_y, 2) * 2
+    blood.recreate_grid(l_x=l_x, l_y=l_y, cell_quantity=GRID_CELL_QUANTITY)
     blood.display()
-
 
 def set_light():
     light_ambient = array([1.0, 1.0, 1.0, 1.0]) * 0.1
@@ -89,7 +107,6 @@ def init():
     global viewport, current_w, current_h
     pygame.init()
 
-    w, h = INIT_WINDOW_SIZE
     viewport = INIT_WINDOW_SIZE
     glutInit(sys.argv)
     # glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH | GLUT_ALPHA)
@@ -102,12 +119,6 @@ def init():
     glEnable(GL_COLOR_MATERIAL)
     glEnable(GL_DEPTH_TEST)
     glShadeModel(GL_SMOOTH)
-
-    glViewport(0, 0, current_w, current_h)
-    glMatrixMode(GL_PROJECTION)
-    glLoadIdentity()
-    gluPerspective(45, current_w * 1.0 / current_h, 0.1, 50)
-    glMatrixMode(GL_MODELVIEW)
 
     create_scene()
 
