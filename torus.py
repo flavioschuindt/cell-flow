@@ -2,12 +2,12 @@ from math import pi, cos, sin, radians, tan
 import itertools
 
 from vector import PVector
-
+from const import TORUS_LIMIT_X, TORUS_LIMIT_Y, TORUS_INITIAL_VEL, TORUS_MAX_VEL, TORUS_LIMIT_Z
 
 class Torus:
 	newid = itertools.count().next
 
-	def __init__(self, color, location, inner_radius, outter_radius, 
+	def __init__(self, color, location, inner_radius, outter_radius,
 				 sides, rings, mass, max_speed, max_force, obj):
 		self.inner_radius = inner_radius
 		self.outter_radius = outter_radius
@@ -20,13 +20,13 @@ class Torus:
 		self.max_speed = max_speed
 		self.max_force = max_force
 		self.id = Torus.newid()
-		
+
 		self.points = []
 		self.matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
 
 		# Object forces and mass
 		self.location = PVector(*location)
-		self.velocity = PVector()
+		self.velocity = PVector(*TORUS_INITIAL_VEL)
 		self.acceleration = PVector()
 		self.mass = mass
 		# Translate object to initial position
@@ -39,32 +39,40 @@ class Torus:
 		f = PVector.div(force, self.mass)
 		self.acceleration.add(f)
 
-	def update(self, aspect, fovy):
+	def update(self):
 
 		self.velocity.add(self.acceleration)
+		if self.velocity.z <0:
+			self.velocity.z *= -1
+		x, y, z = TORUS_MAX_VEL
+		if self.velocity.x > x:
+			self.velocity.x = x
+		if self.velocity.y > y:
+			self.velocity.y = y
+		if self.velocity.z > z:
+			self.velocity.z = z
 		self.location.add(self.velocity)
-		self._check_edges(aspect, fovy)
-
+		self._check_edges()
 		self.acceleration.mult(0)
 
-	def _check_edges(self, aspect, fovy):
+	def _check_edges(self):
 
-		limit_y = round(tan(radians(fovy/2))*-1*self.location.z, 2)
-		limit_x = round(aspect * limit_y, 2)
-
-		if self.location.x > limit_x:
-			self.location.x = limit_x
+		if self.location.x > TORUS_LIMIT_X:
+			self.location.x = TORUS_LIMIT_X
 			self.velocity.x *= -1
-		elif self.location.x < -1*limit_x:
-			self.location.x = -1*limit_x
+		elif self.location.x < -1*TORUS_LIMIT_X:
+			self.location.x = -1*TORUS_LIMIT_X
 			self.velocity.x *= -1
 
-		if self.location.y > limit_y:
+		if self.location.y > TORUS_LIMIT_Y:
 			self.velocity.y *= -1
-			self.location.y = limit_y
-		elif self.location.y < -1*limit_y:
+			self.location.y = TORUS_LIMIT_Y
+		elif self.location.y < -1*TORUS_LIMIT_Y:
 			self.velocity.y *= -1
-			self.location.y = -1*limit_y
+			self.location.y = -1*TORUS_LIMIT_Y
+			self.location.y = -1*TORUS_LIMIT_Y
+		if self.location.z > TORUS_LIMIT_Z:
+			self.location.z = -TORUS_LIMIT_Z
 
 	def translate(self, x=0, y=0, z=0):
 		self.matrix[12] = x
@@ -89,7 +97,7 @@ class Torus:
 					t = j % self.rings
 
 					x = (c + a * cos(s * two_pi / self.sides)) * cos(t * two_pi / self.rings)
-					y = (c + a * cos(s * two_pi / self.sides)) * sin(t * two_pi / self.rings) 
+					y = (c + a * cos(s * two_pi / self.sides)) * sin(t * two_pi / self.rings)
 					z = a * sin(s * two_pi / self.sides)
 					k -= 1
 					self.points.append((x, y, z))
@@ -102,7 +110,7 @@ class Torus:
   	# Separation
   	# Method checks for nearby torus and steers away
   	def separate(self, scene, desired_separation):
-    
+
 		steer = PVector(0.0, 0.0, 0.0)
 		count = 0
 		# For every torus in the system, check if it's too close
@@ -116,7 +124,7 @@ class Torus:
 				diff = PVector.div(diff, d) # Weight by distance
 				steer.add(diff)
 				count += 1 #Keep track of how many
-		
+
 		# Average -- divide by how many
 		if count > 0:
 			steer = PVector.div(steer, float(count))

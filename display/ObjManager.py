@@ -3,7 +3,7 @@ from const import FRAME_PERIOD, INIT_WINDOW_SIZE, INIT_WINDOW_POSITION, \
     TORUS_INNER_RADIUS, TORUS_OUTTER_RADIUS, TORUS_MASS_RANGE, \
     TORUS_QUANTITY, FOVY, Z_NEAR, Z_FAR, FLUID_FORCE, GRAVITY_FORCE_FACTOR, \
     TORUS_DESIRED_SEPARATION, TORUS_FLOCKING_MAX_SPEED, TORUS_FLOCKING_MAX_FORCE, \
-    GRID_CELL_QUANTITY
+    GRID_CELL_QUANTITY, TORUS_LIMIT_X, TORUS_LIMIT_Y, TORUS_LIMIT_Z
 from display.GenericObj import *
 from torus import Torus
 from vector import *
@@ -19,10 +19,10 @@ class ObjManager(object):
     def create(self):
         for x in range(TORUS_QUANTITY):
             mass = random.uniform(*TORUS_MASS_RANGE)
-            location_z = random.uniform(Z_NEAR, Z_FAR)
+            location_z = random.uniform(-TORUS_LIMIT_Z, TORUS_LIMIT_Z)
             self.z_values.append(location_z)
-            location_x = random.uniform(0, 0.03)
-            location_y = random.uniform(0, 0.03)
+            location_x = random.uniform(-TORUS_LIMIT_X, TORUS_LIMIT_X)
+            location_y = random.uniform(-TORUS_LIMIT_Y, TORUS_LIMIT_Y)
             t = Torus(
                 sides=TORUS_SIDES,
                 rings=TORUS_RINGS,
@@ -34,12 +34,12 @@ class ObjManager(object):
                 max_speed=TORUS_FLOCKING_MAX_SPEED,
                 max_force=TORUS_FLOCKING_MAX_FORCE,
                 # obj=GenericObj(size=TORUS_INNER_RADIUS + 2 * TORUS_OUTTER_RADIUS, model="hemacia.obj")
-                obj=GenericObj(size=0.3, model="hemacia.obj")
+                obj=GenericObj(size=0.17, model="hemacia.obj")
             )
             self.pool.append(t)
         self.far_z = max(self.z_values)
 
-    def update(self, aspect):
+    def update(self):
         global scene, grid
         fluid = PVector(*FLUID_FORCE)
         for index, torus in enumerate(self.pool):
@@ -47,7 +47,7 @@ class ObjManager(object):
             self.grid.remove(torus)
             torus.apply_force(fluid)
             torus.apply_force(gravity)
-            torus.update(INIT_WINDOW_SIZE[0]/INIT_WINDOW_SIZE[1], FOVY)
+            torus.update()
             torus.flock(self.grid.get_neighbors(torus), TORUS_DESIRED_SEPARATION)
             torus.translate(torus.location.x, torus.location.y, torus.location.z)
             self.grid.insert(torus)
@@ -60,8 +60,7 @@ class ObjManager(object):
 
             glPushMatrix()
             glMultMatrixf(torus.matrix)
-            glRotate(45, 1, 0, 0)
-
+            # glRotate(45, 1, 0, 0)
             points = torus.calc_points() if len(torus.points) == 0 else torus.points
             torus.obj.display()
             glPopMatrix()

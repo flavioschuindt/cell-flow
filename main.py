@@ -46,7 +46,7 @@ def display():
     # glutSolidSphere(0.5, 16,16)
     # glCallList(artery.model.gl_list)
     artery.display()
-    blood.update(aspect=float(current_w)/current_h)
+    blood.update()
     blood.display()
     pygame.display.flip()
 
@@ -62,9 +62,9 @@ def create_scene():
 
     artery = GenericObj(1.0, "veia.obj")
     # artery.material.difuseRGB =[0.0, 0.0, 0.0,0.0]
-    artery.material.set_difuse(0.3)
-    artery.material.set_specular(0.2)
-    artery.material.set_shininess(100)
+    # artery.material.set_difuse(0.3)
+    # artery.material.set_specular(0.2)
+    # artery.material.set_shininess(100)
     blood = ObjManager()
     blood.create()
     w, h = INIT_WINDOW_SIZE
