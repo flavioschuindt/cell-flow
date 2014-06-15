@@ -9,7 +9,7 @@ from const import FRAME_PERIOD, INIT_WINDOW_SIZE, INIT_WINDOW_POSITION, \
     TORUS_INNER_RADIUS, TORUS_OUTTER_RADIUS, TORUS_MASS_RANGE, \
     TORUS_QUANTITY, FOVY, Z_NEAR, Z_FAR, FLUID_FORCE, GRAVITY_FORCE_FACTOR, \
     TORUS_DESIRED_SEPARATION, TORUS_FLOCKING_MAX_SPEED, TORUS_FLOCKING_MAX_FORCE, \
-    GRID_CELL_QUANTITY
+    GRID_CELL_QUANTITY, TORUS_LIMIT_X, TORUS_LIMIT_Y
 from math import tan, radians
 from numpy import array
 from display.GenericObj import *
@@ -67,10 +67,7 @@ def create_scene():
     # artery.material.set_shininess(100)
     blood = ObjManager()
     blood.create()
-    w, h = INIT_WINDOW_SIZE
-    l_y = round(tan(radians(FOVY/2))*blood.far_z, 2) * 2
-    l_x = round(float(w)/h * l_y, 2) * 2
-    blood.recreate_grid(l_x=l_x, l_y=l_y, cell_quantity=GRID_CELL_QUANTITY)
+    blood.recreate_grid(l_x=TORUS_LIMIT_X*2, l_y=TORUS_LIMIT_Y*2, cell_quantity=GRID_CELL_QUANTITY)
     blood.display()
 
 def set_light():
