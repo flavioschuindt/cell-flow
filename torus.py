@@ -1,5 +1,6 @@
 from math import pi, cos, sin, radians, tan
 import itertools
+import random
 
 from vector import PVector
 from const import TORUS_LIMIT_X, TORUS_LIMIT_Y, TORUS_INITIAL_VEL, TORUS_MAX_VEL, TORUS_LIMIT_Z
@@ -20,6 +21,7 @@ class Torus:
 		self.max_speed = max_speed
 		self.max_force = max_force
 		self.id = Torus.newid()
+		self.rotation_axis = random.randint(0,2)
 
 		self.points = []
 		self.matrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]

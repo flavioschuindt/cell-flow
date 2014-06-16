@@ -3,7 +3,8 @@ from const import FRAME_PERIOD, INIT_WINDOW_SIZE, INIT_WINDOW_POSITION, \
     TORUS_INNER_RADIUS, TORUS_OUTTER_RADIUS, TORUS_MASS_RANGE, \
     TORUS_QUANTITY, FOVY, Z_NEAR, Z_FAR, FLUID_FORCE, GRAVITY_FORCE_FACTOR, \
     TORUS_DESIRED_SEPARATION, TORUS_FLOCKING_MAX_SPEED, TORUS_FLOCKING_MAX_FORCE, \
-    GRID_CELL_QUANTITY, TORUS_LIMIT_X, TORUS_LIMIT_Y, TORUS_LIMIT_Z
+    GRID_CELL_QUANTITY, TORUS_LIMIT_X, TORUS_LIMIT_Y, TORUS_LIMIT_Z, TORUS_ROTATION_AXIS_X, \
+    TORUS_ROTATION_AXIS_Y, TORUS_ROTATION_AXIS_Z
 from display.GenericObj import *
 from torus import Torus
 from vector import *
@@ -60,7 +61,17 @@ class ObjManager(object):
 
             glPushMatrix()
             glMultMatrixf(torus.matrix)
-            # glRotate(45, 1, 0, 0)
+
+            if torus.rotation_axis == TORUS_ROTATION_AXIS_X:
+                torus.rotate(x=1)
+                glRotate(torus.x_rotated, 1, 0, 0)
+            elif torus.rotation_axis == TORUS_ROTATION_AXIS_Y:
+                torus.rotate(y=1)
+                glRotate(torus.y_rotated, 0, 1, 0)
+            else:
+                torus.rotate(z=1)
+                glRotate(torus.z_rotated, 0, 0, 1)
+
             points = torus.calc_points() if len(torus.points) == 0 else torus.points
             torus.obj.display()
             glPopMatrix()
